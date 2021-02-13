@@ -25,6 +25,6 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "0.11.1",
-    "eslint": "7.19.0"
+    "eslint": "7.20.0"
   }
 }
