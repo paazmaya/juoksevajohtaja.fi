@@ -2,11 +2,12 @@
   "name": "juoksevaesimies.fi",
   "version": "0.1.0",
   "description": "Static web site for the running leader podcast",
-  "main": "index.js",
+  "main": "src/game/index.js",
   "private": true,
   "scripts": {
     "build": "npx @11ty/eleventy",
     "start": "npx @11ty/eleventy --serve",
+    "start-game": "snowpack dev --polyfill-node",
     "test": "eslint index.js"
   },
   "repository": {
@@ -25,6 +26,14 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "0.11.1",
+<<<<<<< Updated upstream
     "eslint": "7.22.0"
+=======
+    "eslint": "7.20.0"
+  },
+  "dependencies": {
+    "pixi.js": "5.3.8",
+    "snowpack": "3.0.13"
+>>>>>>> Stashed changes
   }
 }
