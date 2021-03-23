@@ -29,7 +29,7 @@
     "eslint": "7.22.0"
   },
   "dependencies": {
-    "pixi.js": "5.3.8",
+    "pixi.js": "6.0.0",
     "snowpack": "3.0.13"
   }
 }
