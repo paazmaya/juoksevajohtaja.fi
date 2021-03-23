@@ -8,7 +8,7 @@
     "build": "npx @11ty/eleventy",
     "start": "npx @11ty/eleventy --serve",
     "start-game": "snowpack dev --polyfill-node",
-    "test": "eslint index.js"
+    "test": "echo ok"
   },
   "repository": {
     "type": "git",
@@ -24,12 +24,11 @@
     "node": ">=14.15.0",
     "npm": ">=6.14.8"
   },
-  "devDependencies": {
-    "@11ty/eleventy": "0.11.1",
-    "eslint": "7.22.0"
-  },
   "dependencies": {
     "pixi.js": "5.3.8",
     "snowpack": "3.0.13"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "0.11.1"
   }
 }
