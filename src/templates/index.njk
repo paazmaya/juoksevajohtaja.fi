@@ -5,12 +5,14 @@
     {% include 'head.njk' %}
   </head>
   <body>
-    {{ content | safe }}
+    <div class="content">
+      {{ content | safe }}
+    </div>
     <div class="fill fill-1"></div>
     <div class="fill fill-2"></div>
     <div class="fill fill-3"></div>
     <div class="fill fill-4"></div>
     <div class="fill fill-5"></div>
   </body>
-   <script type="module" src="/game/index.js"></script>
+   <!-- <script type="module" src="/game/index.js"></script> -->
 </html>
