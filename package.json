@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "build": "npx @11ty/eleventy",
+    "build-game": "snowpack build --polyfill-node",
     "start": "npx @11ty/eleventy --serve",
     "start-game": "snowpack dev --polyfill-node",
     "test": "echo ok"
