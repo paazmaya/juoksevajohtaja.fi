@@ -3,7 +3,7 @@ title: Juokseva Esimies
 date: Last Modified
 layout: index.njk
 ---
-# Juokseva Esimies on podcast joka saapuu keväällä 2021
+# Juokseva Esimies on podcast joka saapuu kesällä 2021
 
 Juokseva Esimies on podcast, jossa juoksulenkin lomassa haastatellaan ohjelmistokehityksen parissa työskenteleviä johtavia henkilöitä.
 
