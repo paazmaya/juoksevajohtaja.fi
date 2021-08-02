@@ -26,7 +26,7 @@
     "npm": ">=6.14.8"
   },
   "dependencies": {
-    "pixi.js": "6.0.4",
+    "pixi.js": "6.1.0",
     "snowpack": "3.8.3"
   },
   "devDependencies": {
