@@ -1,5 +1,5 @@
 {
-  "name": "juoksevaesimies.fi",
+  "name": "juoksevajohtaja.fi",
   "version": "0.1.0",
   "description": "Static web site for the running leader podcast",
   "main": "src/game/index.js",
@@ -11,19 +11,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/paazmaya/juoksevaesimies.fi.git"
+    "url": "git+https://github.com/paazmaya/juoksevajohtaja.fi.git"
   },
   "author": "Juga Paazmaya <paazmaya@yahoo.com> (https://paazmaya.fi)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/paazmaya/juoksevaesimies.fi/issues"
+    "url": "https://github.com/paazmaya/juoksevajohtaja.fi/issues"
   },
-  "homepage": "https://github.com/paazmaya/juoksevaesimies.fi#readme",
+  "homepage": "https://github.com/paazmaya/juoksevajohtaja.fi#readme",
   "engines": {
     "node": ">=14.15.0",
     "npm": ">=6.14.8"
   },
   "devDependencies": {
-    "@11ty/eleventy": "0.12.1"
+    "@11ty/eleventy": "1.0.0"
   }
 }
