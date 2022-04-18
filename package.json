@@ -24,6 +24,6 @@
     "npm": ">=6.14.8"
   },
   "devDependencies": {
-    "@11ty/eleventy": "1.0.0"
+    "@11ty/eleventy": "1.0.1"
   }
 }
