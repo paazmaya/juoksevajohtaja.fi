@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Static web site for the running leader podcast",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "npx @11ty/eleventy",
     "start": "npx @11ty/eleventy --serve",
@@ -25,7 +26,7 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "1.0.2",
-    "eslint": "8.25.0",
-    "eslint-config-paazmaya": "8.0.0"
+    "eslint": "8.28.0",
+    "eslint-config-paazmaya": "9.0.0"
   }
 }
