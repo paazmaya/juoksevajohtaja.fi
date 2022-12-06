@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Static web site for the running leader podcast",
   "private": true,
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "build": "npx @11ty/eleventy",
     "start": "npx @11ty/eleventy --serve",
-    "lint": "eslint *.js",
+    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint --config eslint.config.mjs *.js",
     "test": "echo ok"
   },
   "repository": {
@@ -27,6 +27,6 @@
   "devDependencies": {
     "@11ty/eleventy": "1.0.2",
     "eslint": "8.28.0",
-    "eslint-config-paazmaya": "9.0.0"
+    "eslint-config-paazmaya": "9.0.1"
   }
 }

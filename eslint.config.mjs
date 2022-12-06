@@ -2,9 +2,8 @@ import paazmaya from 'eslint-config-paazmaya';
 import globals from 'globals';
 
 export default [
-  paazmaya, {
-    plugins: {},
-
+  paazmaya, 
+  {
     languageOptions: {
       globals: {
         ...globals.browser
