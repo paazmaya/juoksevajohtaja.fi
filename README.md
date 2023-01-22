@@ -22,4 +22,4 @@ Technologies used while creating the game:
   * https://www.kenney.nl/assets/platformer-bricks
 * LDtk level editor, https://ldtk.io/
 * WebAssembly, to run fast on a web browser
-* 
+  
