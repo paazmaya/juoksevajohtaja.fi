@@ -1,6 +1,6 @@
 # juoksevajohtaja.fi
 
-[![Node.js v16 CI](https://github.com/paazmaya/juoksevajohtaja.fi/actions/workflows/linting-and-unit-testing.yml/badge.svg)](https://github.com/paazmaya/juoksevajohtaja.fi/actions/workflows/linting-and-unit-testing.yml)
+[![Node.js v20 CI](https://github.com/paazmaya/juoksevajohtaja.fi/actions/workflows/linting-and-unit-testing.yml/badge.svg)](https://github.com/paazmaya/juoksevajohtaja.fi/actions/workflows/linting-and-unit-testing.yml)
 
 Static web site available at [`juoksevajohtaja.fi`](https://juoksevajohtaja.fi),
 made for the "running leader" podcast, hosted at [render](https://render.com/),
