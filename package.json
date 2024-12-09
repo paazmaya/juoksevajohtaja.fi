@@ -7,8 +7,8 @@
   "scripts": {
     "build": "npx @11ty/eleventy",
     "start": "npx @11ty/eleventy --serve",
-    "lint": "npx rome check .eleventy.js",
-    "format": "npx rome format .eleventy.js",
+    "lint": "npx biome check .eleventy.js",
+    "format": "npx biome format .eleventy.js",
     "test": "echo ok"
   },
   "repository": {
