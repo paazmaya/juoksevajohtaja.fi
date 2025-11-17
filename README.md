@@ -13,13 +13,12 @@ and DNS provided for free by [1984](https://1984hosting.com/)
 
 Technologies used while creating the game:
 
-* Rust, https://www.rust-lang.org/, programming language
-* Bevy, https://bevyengine.org/, game engine
-* Rapier, https://rapier.rs/, physics engine
-* Kenney, https://www.kenney.nl/, game assets such as images
-  * https://www.kenney.nl/assets/platformer-characters
-  * https://www.kenney.nl/assets/toon-characters-1
-  * https://www.kenney.nl/assets/platformer-bricks
-* LDtk level editor, https://ldtk.io/
-* WebAssembly, to run fast on a web browser
-  
+- Rust, https://www.rust-lang.org/, programming language
+- Bevy, https://bevyengine.org/, game engine
+- Rapier, https://rapier.rs/, physics engine
+- Kenney, https://www.kenney.nl/, game assets such as images
+  - https://www.kenney.nl/assets/platformer-characters
+  - https://www.kenney.nl/assets/toon-characters-1
+  - https://www.kenney.nl/assets/platformer-bricks
+- LDtk level editor, https://ldtk.io/
+- WebAssembly, to run fast on a web browser
