@@ -15,12 +15,16 @@
     "type": "git",
     "url": "git+https://github.com/paazmaya/juoksevajohtaja.fi.git"
   },
-  "author": "Juga Paazmaya <paazmaya@yahoo.com> (https://paazmaya.fi)",
+  "author": {
+    "name": "Juga Paazmaya",
+    "email": "paazmaya@yahoo.com",
+    "url": "https://paazmaya.fi"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/paazmaya/juoksevajohtaja.fi/issues"
   },
-  "homepage": "https://github.com/paazmaya/juoksevajohtaja.fi#readme",
+  "homepage": "https://github.com/paazmaya/juoksevajohtaja.fi",
   "engines": {
     "node": ">=22.11.0",
     "npm": ">=10.9.0"
