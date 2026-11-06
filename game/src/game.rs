@@ -13,6 +13,13 @@ pub enum AudioCue {
     GameOver,
 }
 
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct InputState {
+    pub right: bool,
+    pub left: bool,
+    pub up: bool,
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum GameState {
     Start,
@@ -70,6 +77,7 @@ pub struct HostCompanion {
 pub struct Game {
     pub level: Level,
     pub state: GameState,
+    pub input: InputState,
     pub distance: f64,
     pub elapsed_time: f64,
     pub player: Runner,
@@ -96,6 +104,7 @@ impl Game {
             triggered_events: Vec::new(),
             level,
             state: GameState::Start,
+            input: InputState::default(),
             distance: 0.0,
             elapsed_time: 0.0,
             last_audio_cue: AudioCue::None,
@@ -130,6 +139,15 @@ impl Game {
     pub fn start(&mut self) {
         if self.state == GameState::Start {
             self.state = GameState::Running;
+        }
+    }
+
+    pub fn set_input(&mut self, right: bool, left: bool, up: bool) {
+        self.input.right = right;
+        self.input.left = left;
+        self.input.up = up;
+        if up && self.state == GameState::Running && self.player.is_grounded {
+            self.jump();
         }
     }
 
@@ -259,20 +277,52 @@ impl Game {
 
         self.elapsed_time += dt;
 
-        // Runner stamina burn: 1 stamina point every 2.5 seconds
-        self.player.stamina = (self.player.stamina - dt * 0.4).max(0.0);
-        if self.player.stamina <= 0.0 {
-            self.state = GameState::GameOver {
-                reason: "Voimat ehtyivät lenkillä! Muista juoda kahvia ja vastata oikein!"
-                    .to_string(),
-            };
-            self.last_audio_cue = AudioCue::GameOver;
-            return;
-        }
+        // Horizontal movement: ONLY via input arrow keys
+        let is_moving_forward = self.input.right;
+        let is_moving_backward = self.input.left;
 
-        // Runner movement
-        self.distance += self.player.speed * dt;
-        self.player.score += (dt * 10.0) as u32;
+        if is_moving_forward {
+            self.distance += self.player.speed * dt;
+            self.player.score += (dt * 10.0) as u32;
+            self.player.stamina = (self.player.stamina - dt * 0.4).max(0.0);
+
+            // Animate runner
+            self.player.animation_timer += dt;
+            if self.player.animation_timer >= 0.12 {
+                self.player.animation_timer = 0.0;
+                self.player.animation_frame = (self.player.animation_frame + 1) % 2;
+            }
+
+            // Animate host running alongside
+            self.host.animation_timer += dt;
+            if self.host.animation_timer >= 0.12 {
+                self.host.animation_timer = 0.0;
+                self.host.animation_frame = (self.host.animation_frame + 1) % 2;
+            }
+        } else if is_moving_backward {
+            self.distance = (self.distance - self.player.speed * 0.6 * dt).max(0.0);
+            self.player.stamina = (self.player.stamina - dt * 0.2).max(0.0);
+
+            // Animate runner
+            self.player.animation_timer += dt;
+            if self.player.animation_timer >= 0.12 {
+                self.player.animation_timer = 0.0;
+                self.player.animation_frame = (self.player.animation_frame + 1) % 2;
+            }
+
+            // Animate host
+            self.host.animation_timer += dt;
+            if self.host.animation_timer >= 0.12 {
+                self.host.animation_timer = 0.0;
+                self.host.animation_frame = (self.host.animation_frame + 1) % 2;
+            }
+        } else {
+            // Idle standing
+            self.player.animation_frame = 0;
+            self.player.animation_timer = 0.0;
+            self.host.animation_frame = 0;
+            self.host.animation_timer = 0.0;
+        }
 
         // Runner gravity & jump physics
         self.player.vy += GRAVITY * dt;
@@ -284,23 +334,17 @@ impl Game {
             self.player.is_grounded = true;
         }
 
-        // Runner animations
-        self.player.animation_timer += dt;
-        if self.player.animation_timer >= 0.12 {
-            self.player.animation_timer = 0.0;
-            self.player.animation_frame = (self.player.animation_frame + 1) % 2;
+        if self.player.stamina <= 0.0 {
+            self.state = GameState::GameOver {
+                reason: "Voimat ehtyivät lenkillä! Muista juoda kahvia ja vastata oikein!"
+                    .to_string(),
+            };
+            self.last_audio_cue = AudioCue::GameOver;
+            return;
         }
 
         if self.player.invulnerability_timer > 0.0 {
             self.player.invulnerability_timer -= dt;
-        }
-
-        // Host companion physics and behavior
-        // Host fluctuates between leading, helping (+speed) and lagging/sabotaging
-        self.host.animation_timer += dt;
-        if self.host.animation_timer >= 0.12 {
-            self.host.animation_timer = 0.0;
-            self.host.animation_frame = (self.host.animation_frame + 1) % 2;
         }
 
         // Check host events
@@ -329,6 +373,8 @@ impl Game {
         for (cp_idx, cp) in &self.active_checkpoints {
             if self.distance >= cp.distance && self.distance < cp.distance + 40.0 {
                 let found_idx = *cp_idx;
+                self.input.right = false;
+                self.input.left = false;
                 self.state = GameState::Quiz {
                     checkpoint_index: found_idx,
                     feedback: None,

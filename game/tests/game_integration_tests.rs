@@ -14,6 +14,29 @@ fn test_game_initialization_and_start() {
 }
 
 #[test]
+fn test_runner_only_moves_with_arrow_keys() {
+    let level = Level::default_episode_1();
+    let mut game = Game::new(level);
+    game.start();
+
+    // With no input, distance does not change and runner stands idle
+    game.update(0.5);
+    assert_eq!(game.distance, 0.0);
+    assert_eq!(game.player.animation_frame, 0);
+
+    // With right arrow key pressed, distance increases
+    game.input.right = true;
+    game.update(0.5);
+    assert!(game.distance > 0.0);
+
+    // Releasing right key stops runner immediately
+    let dist_after_run = game.distance;
+    game.input.right = false;
+    game.update(0.5);
+    assert_eq!(game.distance, dist_after_run);
+}
+
+#[test]
 fn test_player_jump_kinematics() {
     let level = Level::default_episode_1();
     let mut game = Game::new(level);
@@ -42,6 +65,7 @@ fn test_pickup_collection() {
     let level = Level::default_episode_1();
     let mut game = Game::new(level);
     game.start();
+    game.input.right = true;
 
     let initial_pickup_count = game.active_pickups.len();
     assert!(initial_pickup_count > 0);
@@ -65,6 +89,7 @@ fn test_quiz_checkpoint_correct_answer_advances_game() {
     let level = Level::default_episode_1();
     let mut game = Game::new(level);
     game.start();
+    game.input.right = true;
 
     // First checkpoint is at distance 450
     // Advance game until quiz triggers
@@ -92,6 +117,7 @@ fn test_quiz_checkpoint_wrong_answer_penalizes_and_retries() {
     let level = Level::default_episode_1();
     let mut game = Game::new(level);
     game.start();
+    game.input.right = true;
 
     // Advance until checkpoint 1 (dist 450)
     while game.distance < 450.0 && game.state == GameState::Running {
@@ -122,6 +148,7 @@ fn test_full_game_simulation_to_victory() {
 
     let mut game = Game::new(level);
     game.start();
+    game.input.right = true;
 
     // Run up to checkpoint
     while game.distance < 250.0 && game.state == GameState::Running {
@@ -133,6 +160,7 @@ fn test_full_game_simulation_to_victory() {
     game.answer_quiz("A");
     game.update(2.1);
     assert_eq!(game.state, GameState::Running);
+    game.input.right = true;
 
     // Run to finish line
     while game.state == GameState::Running {

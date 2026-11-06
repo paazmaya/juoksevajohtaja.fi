@@ -8,8 +8,8 @@
     <link data-trunk rel="copy-dir" href="assets" />
     <style>
       :root {
-        --bg-color: #121824;
-        --card-bg: #1e293b;
+        --bg-color: #0b1120;
+        --card-bg: rgba(30, 41, 59, 0.95);
         --primary: #ff5e57;
         --secondary: #0984e3;
         --accent: #ffd32a;
@@ -24,49 +24,41 @@
         margin: 0;
         padding: 0;
         user-select: none;
+        -webkit-user-select: none;
       }
 
-      body {
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
         background-color: var(--bg-color);
         color: var(--text);
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      #game-viewport {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
         display: flex;
-        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        min-height: 100vh;
-        padding: 12px;
+        background: #000;
       }
 
-      header {
-        width: 100%;
-        max-width: 960px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-        padding: 0 4px;
-      }
-
-      header a {
-        color: var(--accent);
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 0.95rem;
-      }
-
-      header a:hover {
-        text-decoration: underline;
-      }
-
-      .game-container {
+      #game-stage {
         position: relative;
         width: 100%;
-        max-width: 960px;
+        height: 100%;
+        max-width: calc(100vh * 16 / 9);
+        max-height: calc(100vw * 9 / 16);
         aspect-ratio: 16 / 9;
-        background: #000;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       canvas#game-canvas {
@@ -74,206 +66,360 @@
         width: 100%;
         height: 100%;
         outline: none;
+        cursor: default;
       }
 
-      /* Quiz HTML Overlay (Accessible & Playwright-testable) */
-      #quiz-overlay {
+      /* In-game Top UI Bar */
+      #in-game-ui {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 48px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 16px;
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0) 100%);
+        pointer-events: none;
+        z-index: 20;
+      }
+
+      .ui-left, .ui-center, .ui-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        pointer-events: auto;
+      }
+
+      .ui-btn {
+        background: rgba(30, 41, 59, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #f8fafc;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+
+      .ui-btn:hover {
+        background: rgba(51, 65, 85, 0.95);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .hud-stats {
+        font-size: 0.9rem;
+        gap: 16px;
+      }
+
+      .badge {
+        background: #334155;
+        padding: 3px 8px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .episode-badge {
+        display: inline-block;
+      }
+
+      @media (max-width: 680px) {
+        .hud-stats span:not(:first-child) {
+          display: none;
+        }
+        .episode-badge {
+          display: none;
+        }
+      }
+
+      /* In-game Quiz hotspot interactive layer (transparent buttons over speech bubbles) */
+      #quiz-interactive-layer {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(15, 23, 42, 0.88);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 24px;
+        pointer-events: none;
         z-index: 10;
       }
 
-      #quiz-overlay.hidden {
+      #quiz-interactive-layer.hidden {
         display: none !important;
       }
 
-      .quiz-card {
-        background: #ffffff;
-        color: #1e293b;
-        width: 100%;
-        max-width: 680px;
-        border-radius: 12px;
-        padding: 24px;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-        border: 3px solid #f97316;
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
       }
 
-      .quiz-header {
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-weight: 800;
-        color: #ea580c;
-        margin-bottom: 8px;
-      }
-
-      #quiz-question-text {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 20px;
-        line-height: 1.4;
-      }
-
-      .quiz-choices {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .btn-choice {
-        background: #f1f5f9;
-        border: 2px solid #cbd5e1;
-        color: #0f172a;
-        padding: 14px 18px;
-        border-radius: 8px;
-        font-size: 1.05rem;
-        font-weight: 600;
-        text-align: left;
+      .in-game-choice-btn {
+        pointer-events: auto;
+        position: absolute;
+        left: 31.25%; /* choice_x 300 / 960 */
+        width: 60.4%; /* choice_w 580 / 960 */
+        height: 12.2%; /* choice_h 66 / 540 */
+        border-radius: 10px;
+        background: transparent;
+        border: none;
         cursor: pointer;
-        transition: all 0.15s ease;
+        outline: none;
       }
 
-      .btn-choice:hover {
-        background: #e2e8f0;
-        border-color: #f97316;
-        transform: translateY(-1px);
+      .in-game-choice-btn:hover {
+        background: rgba(9, 132, 227, 0.08);
       }
 
-      #quiz-feedback-box {
-        margin-top: 16px;
-        padding: 12px 16px;
-        border-radius: 8px;
-        font-size: 0.95rem;
-        font-weight: 600;
+      .in-game-choice-btn.choice-a {
+        top: 40.7%; /* choice_a_y 220 / 540 */
       }
 
-      #quiz-feedback-box.hidden {
-        display: none;
+      .in-game-choice-btn.choice-b {
+        top: 55.5%; /* choice_b_y 300 / 540 */
       }
 
-      /* Control and HUD strip */
-      .controls-bar {
-        width: 100%;
-        max-width: 960px;
+      /* Mobile touch controls */
+      #touch-controls {
+        position: absolute;
+        bottom: 16px;
+        left: 16px;
+        right: 16px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: var(--card-bg);
-        margin-top: 12px;
-        padding: 12px 18px;
-        border-radius: 8px;
+        pointer-events: none;
+        z-index: 25;
+      }
+
+      .touch-group {
+        display: flex;
+        gap: 12px;
+        pointer-events: auto;
+      }
+
+      .touch-btn {
+        background: rgba(30, 41, 59, 0.75);
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        color: #fff;
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        font-size: 1.25rem;
+        font-weight: bold;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        touch-action: manipulation;
+        pointer-events: auto;
+        transition: transform 0.08s ease, background 0.08s ease;
+      }
+
+      .touch-btn:active {
+        transform: scale(0.92);
+        background: rgba(255, 94, 87, 0.85);
+      }
+
+      .touch-btn.jump-btn {
+        width: 72px;
+        height: 72px;
+        background: rgba(255, 94, 87, 0.85);
+        border-radius: 50%;
         font-size: 0.95rem;
       }
 
-      .hud-stats {
+      /* Dimmed Overlay for About / Instructions */
+      #about-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.82);
+        backdrop-filter: blur(5px);
         display: flex;
-        gap: 18px;
+        justify-content: center;
         align-items: center;
+        padding: 20px;
+        z-index: 100;
+        opacity: 1;
+        transition: opacity 0.2s ease;
       }
 
-      .badge {
-        background: #334155;
-        padding: 4px 10px;
+      #about-overlay.hidden {
+        display: none !important;
+      }
+
+      .about-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: var(--text);
+        max-width: 640px;
+        width: 100%;
+        max-height: 85vh;
+        overflow-y: auto;
         border-radius: 12px;
-        font-size: 0.8rem;
-        font-weight: 700;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        padding: 24px 28px;
+      }
+
+      .about-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 12px;
+      }
+
+      .about-header h2 {
+        font-size: 1.25rem;
         color: var(--accent);
       }
 
-      .btn-jump {
-        background: var(--primary);
-        color: #ffffff;
+      .close-btn {
+        background: none;
         border: none;
-        padding: 10px 24px;
-        border-radius: 6px;
-        font-size: 1rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: transform 0.1s ease;
-      }
-
-      .btn-jump:active {
-        transform: scale(0.96);
-      }
-
-      .instructions-panel {
-        width: 100%;
-        max-width: 960px;
-        margin-top: 16px;
-        background: rgba(30, 41, 59, 0.5);
-        padding: 16px 20px;
-        border-radius: 8px;
-        font-size: 0.9rem;
         color: var(--text-muted);
+        font-size: 2rem;
+        cursor: pointer;
+        line-height: 1;
+      }
+
+      .close-btn:hover {
+        color: #fff;
+      }
+
+      .about-body {
+        font-size: 0.95rem;
         line-height: 1.6;
+        color: #cbd5e1;
       }
 
-      .instructions-panel strong {
-        color: var(--text);
+      .about-body h3 {
+        font-size: 1.05rem;
+        color: #fff;
+        margin: 16px 0 8px;
       }
 
-      @media (max-width: 600px) {
-        .controls-bar {
-          flex-direction: column;
-          gap: 10px;
-        }
-        #quiz-question-text {
-          font-size: 1.1rem;
-        }
+      .about-body ul {
+        margin-left: 20px;
+        margin-bottom: 16px;
+      }
+
+      .about-body li {
+        margin-bottom: 6px;
+      }
+
+      .about-footer {
+        margin-top: 20px;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 6px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .btn-primary:hover {
+        opacity: 0.9;
       }
     </style>
   </head>
   <body>
-    <header>
-      <a href="/">← Takaisin Juokseva Johtaja -sivustolle</a>
-      <span>🎙️ Podcast Runner 2D</span>
-    </header>
+    <div id="game-viewport">
+      <div id="game-stage">
+        <canvas id="game-canvas" width="960" height="540"></canvas>
 
-    <div class="game-container">
-      <canvas id="game-canvas" width="960" height="540"></canvas>
-
-      <!-- Accessible / Playwright-interactive Quiz Modal -->
-      <div id="quiz-overlay" class="hidden" role="dialog" aria-modal="true" aria-labelledby="quiz-question-text">
-        <div class="quiz-card">
-          <div class="quiz-header">🎙️ Jakson Kysymysrasti</div>
-          <div id="quiz-question-text">Ladataan kysymystä...</div>
-          <div class="quiz-choices">
-            <button id="btn-choice-a" class="btn-choice">[1] Vaihtoehto A</button>
-            <button id="btn-choice-b" class="btn-choice">[2] Vaihtoehto B</button>
-          </div>
-          <div id="quiz-feedback-box" class="hidden"></div>
+        <!-- In-game non-obtrusive quiz interactive layer (aligned with speech bubbles) -->
+        <div id="quiz-interactive-layer" class="hidden" role="dialog" aria-modal="false" aria-labelledby="quiz-question-text">
+          <div id="quiz-question-text" class="sr-only">Ladataan kysymystä...</div>
+          <button id="btn-choice-a" class="in-game-choice-btn choice-a" aria-label="Vaihtoehto 1">[1] Vaihtoehto A</button>
+          <button id="btn-choice-b" class="in-game-choice-btn choice-b" aria-label="Vaihtoehto 2">[2] Vaihtoehto B</button>
+          <div id="quiz-feedback-box" class="sr-only"></div>
         </div>
       </div>
-    </div>
 
-    <div class="controls-bar">
-      <div class="hud-stats">
-        <span>Tila: <strong id="game-state-label" class="badge">START</strong></span>
-        <span>Matka: <strong id="distance-value">0</strong>m</span>
-        <span>Pisteet: <strong id="score-value">0</strong></span>
+      <!-- In-game top UI bar with back link and about button -->
+      <nav id="in-game-ui" aria-label="Pelin ohjauspaneeli">
+        <div class="ui-left">
+          <a id="btn-back-link" href="/" class="ui-btn">← Takaisin</a>
+          <button id="btn-instructions" class="ui-btn">ℹ️ Ohjeet / Tietoa</button>
+        </div>
+        <div class="ui-center hud-stats">
+          <span>Tila: <strong id="game-state-label" class="badge">START</strong></span>
+          <span>Matka: <strong id="distance-value">0</strong>m</span>
+          <span>Pisteet: <strong id="score-value">0</strong></span>
+        </div>
+        <div class="ui-right">
+          <span class="badge episode-badge">🎙️ Juokseva Johtaja</span>
+        </div>
+      </nav>
+
+      <!-- Touch controls for mobile / touch devices -->
+      <div id="touch-controls">
+        <div class="touch-group">
+          <button id="btn-touch-left" class="touch-btn" aria-label="Vasen">◀</button>
+          <button id="btn-touch-right" class="touch-btn" aria-label="Oikea">▶</button>
+        </div>
+        <button id="btn-jump-touch" class="touch-btn jump-btn" aria-label="Hyppää">▲ Hyppy</button>
       </div>
-      <button id="btn-jump-touch" class="btn-jump">Hyppää [VÄLILYÖNTI]</button>
-    </div>
 
-    <div class="instructions-panel">
-      <p>
-        <strong>Ohjaimet:</strong> <strong>Välilyönti</strong> tai <strong>Nuoli ylös</strong> = Hyppy esteiden yli |
-        <strong>1</strong> ja <strong>2</strong> = Vastaa rasteilla podcast-kysymyksiin |
-        <strong>R</strong> = Uudelleenkäynnistys
-      </p>
-      <p>
-        Pelaat haastateltavana johtajana. Isäntä Jukka Paasonen juoksee rinnalla ja tarjoaa välillä peesi- ja kahviapua,
-        välillä yllättäviä kalenterikutsuja ja tuotantohälytyksiä. Kysymysrasteilla eteneminen vaatii podcast-jakson tietämystä!
-      </p>
+      <!-- Dimmed Overlay for About / Instructions -->
+      <div id="about-overlay" class="hidden" role="dialog" aria-modal="true" aria-labelledby="about-title">
+        <div class="about-card">
+          <div class="about-header">
+            <h2 id="about-title">🎙️ Juokseva Johtaja - Podcast Runner</h2>
+            <button id="btn-close-about" class="close-btn" aria-label="Sulje ohjeet">&times;</button>
+          </div>
+          <div class="about-body">
+            <section>
+              <h3>Tietoa pelistä</h3>
+              <p>
+                Juokseva Johtaja on 2D-juoksupeli, joka ammentaa teemansa ohjelmistoalan johtajia käsittelevästä
+                podcastista. Pelaat haastateltavana johtajana, ja isäntä Jukka Paasonen juoksee rinnallasi.
+              </p>
+              <p>
+                Isäntä välillä auttaa peesillä ja tarjoaa kahvikupin tuomaa lisäenergiaa, ja välillä sabotoidusti
+                heittää eteesi yllättäviä kalenterikutsuja ja tuotantohälytyksiä. Kysymysrasteilla eteneminen
+                vaatii podcast-jakson tietämystä!
+              </p>
+            </section>
+            <section>
+              <h3>Ohjaimet</h3>
+              <ul>
+                <li><strong>Nuoli oikealle [→] / [D]:</strong> Juokse eteenpäin (juoksijat liikkuvat vain näppäimillä!)</li>
+                <li><strong>Nuoli vasemmalle [←] / [A]:</strong> Peruuta taaksepäin</li>
+                <li><strong>Nuoli ylös [↑] / Välilyönti:</strong> Hyppää esteiden yli</li>
+                <li><strong>1 ja 2:</strong> Vastaa podcast-kysymysrasteihin</li>
+                <li><strong>R:</strong> Aloita lenkki alusta</li>
+                <li><strong>ESC:</strong> Sulje tämä ohjeikkuna</li>
+              </ul>
+            </section>
+          </div>
+          <div class="about-footer">
+            <button id="btn-about-continue" class="btn-primary">Jatka lenkkiä</button>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

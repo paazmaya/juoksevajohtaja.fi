@@ -64,19 +64,19 @@ pub fn start_game() -> Result<(), JsValue> {
         if let Some(el) = doc.get_element_by_id("distance-value") {
             el.set_text_content(Some(&format!("{:.0}", g.distance)));
         }
-        if let Some(modal) = doc.get_element_by_id("quiz-overlay") {
+        if let Some(layer) = doc.get_element_by_id("quiz-interactive-layer") {
             match &g.state {
                 GameState::Quiz {
                     checkpoint_index,
                     feedback,
                 } => {
-                    let _ = modal.class_list().remove_1("hidden");
+                    let _ = layer.class_list().remove_1("hidden");
                     if let Some(cp) = g.level.checkpoints.get(*checkpoint_index) {
                         if let Some(q_el) = doc.get_element_by_id("quiz-question-text") {
                             q_el.set_text_content(Some(&cp.question));
                         }
                         if let Some(btn_a) = doc.get_element_by_id("btn-choice-a") {
-                            if let Some(opt_a) = cp.options.get(0) {
+                            if let Some(opt_a) = cp.options.first() {
                                 btn_a.set_text_content(Some(&format!("[1] {}", opt_a.text)));
                             }
                         }
@@ -101,13 +101,13 @@ pub fn start_game() -> Result<(), JsValue> {
                     }
                 }
                 _ => {
-                    let _ = modal.class_list().add_1("hidden");
+                    let _ = layer.class_list().add_1("hidden");
                 }
             }
         }
     }
 
-    // Keyboard controls
+    // Keyboard controls: keydown
     {
         let game_clone = game.clone();
         let doc_clone = document.clone();
@@ -116,12 +116,24 @@ pub fn start_game() -> Result<(), JsValue> {
                 let key = event.key();
                 let mut g = game_clone.borrow_mut();
                 match key.as_str() {
+                    "ArrowRight" | "d" | "D" => {
+                        if g.state == GameState::Start {
+                            g.start();
+                        }
+                        g.input.right = true;
+                        event.prevent_default();
+                    }
+                    "ArrowLeft" | "a" | "A" => {
+                        g.input.left = true;
+                        event.prevent_default();
+                    }
                     " " | "ArrowUp" | "w" | "W" => {
                         if g.state == GameState::Start {
                             g.start();
                         } else if g.state == GameState::Running {
                             g.jump();
                         }
+                        g.input.up = true;
                         event.prevent_default();
                     }
                     "1" => {
@@ -144,6 +156,11 @@ pub fn start_game() -> Result<(), JsValue> {
                             g.start();
                         }
                     }
+                    "Escape" => {
+                        if let Some(modal) = doc_clone.get_element_by_id("about-overlay") {
+                            let _ = modal.class_list().add_1("hidden");
+                        }
+                    }
                     _ => {}
                 }
                 update_dom_status(&doc_clone, &g);
@@ -156,15 +173,75 @@ pub fn start_game() -> Result<(), JsValue> {
         keydown_closure.forget();
     }
 
-    // Click / Touch on Canvas
+    // Keyboard controls: keyup
+    {
+        let game_clone = game.clone();
+        let keyup_closure = Closure::<dyn FnMut(web_sys::KeyboardEvent)>::new(
+            move |event: web_sys::KeyboardEvent| {
+                let key = event.key();
+                let mut g = game_clone.borrow_mut();
+                match key.as_str() {
+                    "ArrowRight" | "d" | "D" => {
+                        g.input.right = false;
+                    }
+                    "ArrowLeft" | "a" | "A" => {
+                        g.input.left = false;
+                    }
+                    " " | "ArrowUp" | "w" | "W" => {
+                        g.input.up = false;
+                    }
+                    _ => {}
+                }
+            },
+        );
+        window.add_event_listener_with_callback(
+            "keyup",
+            keyup_closure.as_ref().unchecked_ref(),
+        )?;
+        keyup_closure.forget();
+    }
+
+    // Window blur: reset input to prevent stuck keys
+    {
+        let game_clone = game.clone();
+        let blur_closure = Closure::<dyn FnMut()>::new(move || {
+            let mut g = game_clone.borrow_mut();
+            g.input.right = false;
+            g.input.left = false;
+            g.input.up = false;
+        });
+        window.add_event_listener_with_callback(
+            "blur",
+            blur_closure.as_ref().unchecked_ref(),
+        )?;
+        blur_closure.forget();
+    }
+
+    // Canvas click
     {
         let game_clone = game.clone();
         let doc_clone = document.clone();
+        let canvas_ref = canvas.clone();
         let click_closure =
-            Closure::<dyn FnMut(web_sys::MouseEvent)>::new(move |_event: web_sys::MouseEvent| {
+            Closure::<dyn FnMut(web_sys::MouseEvent)>::new(move |event: web_sys::MouseEvent| {
                 let mut g = game_clone.borrow_mut();
+                let rect = canvas_ref.get_bounding_client_rect();
+                let scale_x = canvas_ref.width() as f64 / rect.width();
+                let scale_y = canvas_ref.height() as f64 / rect.height();
+                let click_x = (event.client_x() as f64 - rect.left()) * scale_x;
+                let click_y = (event.client_y() as f64 - rect.top()) * scale_y;
+
                 if g.state == GameState::Start {
                     g.start();
+                } else if matches!(g.state, GameState::Quiz { .. }) {
+                    // Check if clicked choice A or B on canvas
+                    if click_x >= 280.0 && click_x <= 880.0 {
+                        if click_y >= 210.0 && click_y <= 290.0 {
+                            g.answer_quiz("A");
+                        } else if click_y >= 295.0 && click_y <= 375.0 {
+                            g.answer_quiz("B");
+                        }
+                    }
                 } else if g.state == GameState::Running {
                     g.jump();
                 } else if matches!(
@@ -222,6 +299,105 @@ pub fn start_game() -> Result<(), JsValue> {
                 update_dom_status(&d, &gm);
             });
             btn_jump.add_event_listener_with_callback("click", cb.as_ref().unchecked_ref())?;
+            cb.forget();
+        }
+
+        // On-screen touch left button
+        if let Some(btn_left) = document.get_element_by_id("btn-touch-left") {
+            let g = game_clone.clone();
+            let cb_down = Closure::<dyn FnMut()>::new({
+                let g = g.clone();
+                move || {
+                    g.borrow_mut().input.left = true;
+                }
+            });
+            let cb_up = Closure::<dyn FnMut()>::new({
+                let g = g.clone();
+                move || {
+                    g.borrow_mut().input.left = false;
+                }
+            });
+            btn_left.add_event_listener_with_callback("pointerdown", cb_down.as_ref().unchecked_ref())?;
+            btn_left.add_event_listener_with_callback("pointerup", cb_up.as_ref().unchecked_ref())?;
+            btn_left.add_event_listener_with_callback("pointercancel", cb_up.as_ref().unchecked_ref())?;
+            btn_left.add_event_listener_with_callback("pointerleave", cb_up.as_ref().unchecked_ref())?;
+            cb_down.forget();
+            cb_up.forget();
+        }
+
+        // On-screen touch right button
+        if let Some(btn_right) = document.get_element_by_id("btn-touch-right") {
+            let g = game_clone.clone();
+            let cb_down = Closure::<dyn FnMut()>::new({
+                let g = g.clone();
+                move || {
+                    let mut gm = g.borrow_mut();
+                    if gm.state == GameState::Start {
+                        gm.start();
+                    }
+                    gm.input.right = true;
+                }
+            });
+            let cb_up = Closure::<dyn FnMut()>::new({
+                let g = g.clone();
+                move || {
+                    g.borrow_mut().input.right = false;
+                }
+            });
+            btn_right.add_event_listener_with_callback("pointerdown", cb_down.as_ref().unchecked_ref())?;
+            btn_right.add_event_listener_with_callback("pointerup", cb_up.as_ref().unchecked_ref())?;
+            btn_right.add_event_listener_with_callback("pointercancel", cb_up.as_ref().unchecked_ref())?;
+            btn_right.add_event_listener_with_callback("pointerleave", cb_up.as_ref().unchecked_ref())?;
+            cb_down.forget();
+            cb_up.forget();
+        }
+
+        // About / Instructions modal toggle
+        if let Some(btn_inst) = document.get_element_by_id("btn-instructions") {
+            let d = doc_clone.clone();
+            let cb = Closure::<dyn FnMut()>::new(move || {
+                if let Some(modal) = d.get_element_by_id("about-overlay") {
+                    let _ = modal.class_list().remove_1("hidden");
+                }
+            });
+            btn_inst.add_event_listener_with_callback("click", cb.as_ref().unchecked_ref())?;
+            cb.forget();
+        }
+
+        if let Some(btn_close) = document.get_element_by_id("btn-close-about") {
+            let d = doc_clone.clone();
+            let cb = Closure::<dyn FnMut()>::new(move || {
+                if let Some(modal) = d.get_element_by_id("about-overlay") {
+                    let _ = modal.class_list().add_1("hidden");
+                }
+            });
+            btn_close.add_event_listener_with_callback("click", cb.as_ref().unchecked_ref())?;
+            cb.forget();
+        }
+
+        if let Some(btn_cont) = document.get_element_by_id("btn-about-continue") {
+            let d = doc_clone.clone();
+            let cb = Closure::<dyn FnMut()>::new(move || {
+                if let Some(modal) = d.get_element_by_id("about-overlay") {
+                    let _ = modal.class_list().add_1("hidden");
+                }
+            });
+            btn_cont.add_event_listener_with_callback("click", cb.as_ref().unchecked_ref())?;
+            cb.forget();
+        }
+
+        if let Some(about_modal) = document.get_element_by_id("about-overlay") {
+            let modal_ref = about_modal.clone();
+            let cb = Closure::<dyn FnMut(web_sys::MouseEvent)>::new(move |event: web_sys::MouseEvent| {
+                if let Some(target) = event.target() {
+                    if let Ok(target_el) = target.dyn_into::<web_sys::Element>() {
+                        if target_el.id() == "about-overlay" {
+                            let _ = modal_ref.class_list().add_1("hidden");
+                        }
+                    }
+                }
+            });
+            about_modal.add_event_listener_with_callback("click", cb.as_ref().unchecked_ref())?;
             cb.forget();
         }
     }

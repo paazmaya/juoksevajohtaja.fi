@@ -12,6 +12,103 @@ pub struct Renderer {
 }
 
 #[cfg(target_arch = "wasm32")]
+fn wrap_text(text: &str, max_chars: usize) -> Vec<String> {
+    let mut lines = Vec::new();
+    let mut current_line = String::new();
+    for word in text.split_whitespace() {
+        if current_line.is_empty() {
+            current_line.push_str(word);
+        } else if current_line.chars().count() + 1 + word.chars().count() <= max_chars {
+            current_line.push(' ');
+            current_line.push_str(word);
+        } else {
+            lines.push(current_line);
+            current_line = word.to_string();
+        }
+    }
+    if !current_line.is_empty() {
+        lines.push(current_line);
+    }
+    lines
+}
+
+#[cfg(target_arch = "wasm32")]
+fn draw_rounded_rect(
+    ctx: &CanvasRenderingContext2d,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    r: f64,
+    bg: &str,
+    border: &str,
+    line_width: f64,
+) {
+    ctx.set_fill_style_str(bg);
+    ctx.set_stroke_style_str(border);
+    ctx.set_line_width(line_width);
+    ctx.begin_path();
+    ctx.move_to(x + r, y);
+    ctx.line_to(x + w - r, y);
+    let _ = ctx.arc_to(x + w, y, x + w, y + r, r);
+    ctx.line_to(x + w, y + h - r);
+    let _ = ctx.arc_to(x + w, y + h, x + w - r, y + h, r);
+    ctx.line_to(x + r, y + h);
+    let _ = ctx.arc_to(x, y + h, x, y + h - r, r);
+    ctx.line_to(x, y + r);
+    let _ = ctx.arc_to(x, y, x + r, y, r);
+    ctx.close_path();
+    ctx.fill();
+    ctx.stroke();
+}
+
+#[cfg(target_arch = "wasm32")]
+fn draw_tail_down(
+    ctx: &CanvasRenderingContext2d,
+    tail_x: f64,
+    bubble_bottom_y: f64,
+    tip_y: f64,
+    bg: &str,
+    border: &str,
+    line_width: f64,
+) {
+    ctx.set_fill_style_str(bg);
+    ctx.set_stroke_style_str(border);
+    ctx.set_line_width(line_width);
+    ctx.begin_path();
+    ctx.move_to(tail_x - 14.0, bubble_bottom_y - 1.0);
+    ctx.line_to(tail_x + 14.0, bubble_bottom_y - 1.0);
+    ctx.line_to(tail_x, tip_y);
+    ctx.close_path();
+    ctx.fill();
+    ctx.stroke();
+    ctx.fill_rect(tail_x - 12.0, bubble_bottom_y - 3.0, 24.0, 5.0);
+}
+
+#[cfg(target_arch = "wasm32")]
+fn draw_tail_left(
+    ctx: &CanvasRenderingContext2d,
+    bubble_left_x: f64,
+    tail_y: f64,
+    tip_x: f64,
+    bg: &str,
+    border: &str,
+    line_width: f64,
+) {
+    ctx.set_fill_style_str(bg);
+    ctx.set_stroke_style_str(border);
+    ctx.set_line_width(line_width);
+    ctx.begin_path();
+    ctx.move_to(bubble_left_x + 1.0, tail_y - 12.0);
+    ctx.line_to(bubble_left_x + 1.0, tail_y + 12.0);
+    ctx.line_to(tip_x, tail_y);
+    ctx.close_path();
+    ctx.fill();
+    ctx.stroke();
+    ctx.fill_rect(bubble_left_x - 2.0, tail_y - 10.0, 5.0, 20.0);
+}
+
+#[cfg(target_arch = "wasm32")]
 impl Renderer {
     pub fn new(width: f64, height: f64) -> Self {
         Self { width, height }
@@ -448,8 +545,8 @@ impl Renderer {
             270.0,
         );
         let _ = ctx.fill_text(
-            "Vastaa podcast-jakson oppeja mittaaviin kysymyksiin ja vältä esteitä!",
-            center_x - 260.0,
+            "Liiku nuolinäppäimillä [→] / [←], hyppää esteiden yli [↑] tai [VÄLILYÖNTI].",
+            center_x - 265.0,
             300.0,
         );
 
@@ -457,7 +554,7 @@ impl Renderer {
         ctx.fill_rect(center_x - 170.0, 340.0, 340.0, 60.0);
         ctx.set_fill_style_str("#ffffff");
         ctx.set_font("bold 22px sans-serif");
-        let _ = ctx.fill_text("ALOTA LENKKI [VÄLILYÖNTI]", center_x - 145.0, 378.0);
+        let _ = ctx.fill_text("ALOTA LENKKI [→]", center_x - 110.0, 378.0);
     }
 
     fn draw_quiz_overlay(
@@ -466,85 +563,199 @@ impl Renderer {
         game: &Game,
         feedback: Option<&crate::game::QuizFeedback>,
     ) {
-        ctx.set_fill_style_str("rgba(0, 0, 0, 0.75)");
-        ctx.fill_rect(0.0, 0.0, self.width, self.height);
-
+        // Unobtrusive in-game speech bubbles: runners, ground, and scenery remain completely visible!
         let cp = match game.current_checkpoint() {
             Some(c) => c,
             None => return,
         };
 
-        let card_w = 720.0;
-        let card_h = 360.0;
-        let card_x = (self.width - card_w) / 2.0;
-        let card_y = 70.0;
+        let host_x = game.player.x + game.host.x_offset;
 
-        // Question card
-        ctx.set_fill_style_str("#ffffff");
-        ctx.fill_rect(card_x, card_y, card_w, card_h);
-        ctx.set_stroke_style_str("#e67e22");
-        ctx.set_line_width(4.0);
-        ctx.stroke_rect(card_x, card_y, card_w, card_h);
+        // 1. Question speech bubble ABOVE the runners
+        let q_x = 50.0;
+        let q_y = 60.0;
+        let q_w = 540.0;
+        let q_h = 135.0;
 
-        // Header
-        ctx.set_fill_style_str("#e67e22");
-        ctx.fill_rect(card_x, card_y, card_w, 48.0);
-        ctx.set_fill_style_str("#ffffff");
-        ctx.set_font("bold 18px sans-serif");
-        let _ = ctx.fill_text("🎙️ PODCAST-KYSYMYS RASTILLA", card_x + 20.0, card_y + 32.0);
+        draw_rounded_rect(ctx, q_x, q_y, q_w, q_h, 12.0, "#ffffff", "#ea580c", 3.0);
+        // Tail points down to Host runner
+        let tail_target_x = (host_x + 20.0).clamp(q_x + 30.0, q_x + q_w - 30.0);
+        draw_tail_down(
+            ctx,
+            tail_target_x,
+            q_y + q_h,
+            q_y + q_h + 30.0,
+            "#ffffff",
+            "#ea580c",
+            3.0,
+        );
 
-        // Question text
-        ctx.set_fill_style_str("#2c3e50");
-        ctx.set_font("bold 18px sans-serif");
-        let _ = ctx.fill_text(&cp.question, card_x + 25.0, card_y + 90.0);
+        // Header badge
+        ctx.set_fill_style_str("#ea580c");
+        ctx.set_font("bold 14px sans-serif");
+        let _ = ctx.fill_text(
+            "🎙️ JUKKA (JUOKSEVA JOHTAJA) KYSYY:",
+            q_x + 18.0,
+            q_y + 24.0,
+        );
 
+        // Wrapped question text
+        ctx.set_fill_style_str("#1e293b");
+        ctx.set_font("bold 16px sans-serif");
+        let q_lines = wrap_text(&cp.question, 46);
+        for (idx, line) in q_lines.iter().enumerate().take(3) {
+            let _ = ctx.fill_text(line, q_x + 18.0, q_y + 50.0 + (idx as f64 * 22.0));
+        }
+
+        // Timestamp hint if present
         if let Some(ts) = &cp.podcast_timestamp {
-            ctx.set_fill_style_str("#7f8c8d");
-            ctx.set_font("italic 14px sans-serif");
+            ctx.set_fill_style_str("#64748b");
+            ctx.set_font("italic 12px sans-serif");
             let _ = ctx.fill_text(
                 &format!("(Kuuntele jaksosta kohdasta ~{})", ts),
-                card_x + 25.0,
-                card_y + 115.0,
+                q_x + 18.0,
+                q_y + q_h - 12.0,
             );
         }
 
-        // Choices
-        let mut btn_y = card_y + 145.0;
-        for (i, opt) in cp.options.iter().enumerate() {
-            let key_label = if i == 0 { "[1]" } else { "[2]" };
-            ctx.set_fill_style_str("#f1f2f6");
-            ctx.fill_rect(card_x + 25.0, btn_y, card_w - 50.0, 50.0);
-            ctx.set_stroke_style_str("#ced6e0");
-            ctx.set_line_width(2.0);
-            ctx.stroke_rect(card_x + 25.0, btn_y, card_w - 50.0, 50.0);
+        // 2. Answer choices NEXT TO the runners, stacked on top of each other
+        let choice_x = 300.0;
+        let choice_w = 580.0;
+        let choice_h = 66.0;
 
-            ctx.set_fill_style_str("#2f3542");
-            ctx.set_font("bold 16px sans-serif");
-            let _ = ctx.fill_text(
-                &format!("{} {}", key_label, opt.text),
-                card_x + 40.0,
-                btn_y + 32.0,
-            );
+        let opt_a = cp.options.first();
+        let opt_b = cp.options.get(1);
 
-            btn_y += 62.0;
-        }
-
-        // Feedback notification if answered
-        if let Some(fb) = feedback {
-            let fb_bg = if fb.is_correct { "#2ed573" } else { "#ff4757" };
-            ctx.set_fill_style_str(fb_bg);
-            ctx.fill_rect(card_x + 25.0, card_y + 280.0, card_w - 50.0, 60.0);
-
-            ctx.set_fill_style_str("#ffffff");
-            ctx.set_font("bold 15px sans-serif");
-            let header = if fb.is_correct {
-                "OIKEIN! (+150 pistettä ja kuntoa)"
+        // Choice A / 1
+        let a_y = 220.0;
+        let (a_bg, a_border) = if let Some(_fb) = feedback {
+            if opt_a.map(|o| o.is_correct).unwrap_or(false) {
+                ("#ecfdf5", "#10b981")
             } else {
-                "VÄÄRIN! (-20 kuntoa)"
+                ("#fef2f2", "#ef4444")
+            }
+        } else {
+            ("#ffffff", "#0984e3")
+        };
+        draw_rounded_rect(
+            ctx, choice_x, a_y, choice_w, choice_h, 10.0, a_bg, a_border, 2.5,
+        );
+        draw_tail_left(
+            ctx,
+            choice_x,
+            a_y + 33.0,
+            choice_x - 18.0,
+            a_bg,
+            a_border,
+            2.5,
+        );
+
+        // Choice A pill badge "[1]"
+        draw_rounded_rect(
+            ctx,
+            choice_x + 14.0,
+            a_y + 16.0,
+            38.0,
+            34.0,
+            6.0,
+            "#0984e3",
+            "#0984e3",
+            1.0,
+        );
+        ctx.set_fill_style_str("#ffffff");
+        ctx.set_font("bold 16px sans-serif");
+        let _ = ctx.fill_text("[1]", choice_x + 23.0, a_y + 39.0);
+
+        // Choice A text
+        if let Some(oa) = opt_a {
+            ctx.set_fill_style_str("#0f172a");
+            ctx.set_font("bold 15px sans-serif");
+            let a_lines = wrap_text(&oa.text, 50);
+            for (idx, line) in a_lines.iter().enumerate().take(2) {
+                let _ = ctx.fill_text(line, choice_x + 62.0, a_y + 30.0 + (idx as f64 * 20.0));
+            }
+        }
+
+        // Choice B / 2
+        let b_y = 300.0;
+        let (b_bg, b_border) = if let Some(_fb) = feedback {
+            if opt_b.map(|o| o.is_correct).unwrap_or(false) {
+                ("#ecfdf5", "#10b981")
+            } else {
+                ("#fef2f2", "#ef4444")
+            }
+        } else {
+            ("#ffffff", "#0984e3")
+        };
+        draw_rounded_rect(
+            ctx, choice_x, b_y, choice_w, choice_h, 10.0, b_bg, b_border, 2.5,
+        );
+        draw_tail_left(
+            ctx,
+            choice_x,
+            b_y + 33.0,
+            choice_x - 18.0,
+            b_bg,
+            b_border,
+            2.5,
+        );
+
+        // Choice B pill badge "[2]"
+        draw_rounded_rect(
+            ctx,
+            choice_x + 14.0,
+            b_y + 16.0,
+            38.0,
+            34.0,
+            6.0,
+            "#0984e3",
+            "#0984e3",
+            1.0,
+        );
+        ctx.set_fill_style_str("#ffffff");
+        ctx.set_font("bold 16px sans-serif");
+        let _ = ctx.fill_text("[2]", choice_x + 23.0, b_y + 39.0);
+
+        // Choice B text
+        if let Some(ob) = opt_b {
+            ctx.set_fill_style_str("#0f172a");
+            ctx.set_font("bold 15px sans-serif");
+            let b_lines = wrap_text(&ob.text, 50);
+            for (idx, line) in b_lines.iter().enumerate().take(2) {
+                let _ = ctx.fill_text(line, choice_x + 62.0, b_y + 30.0 + (idx as f64 * 20.0));
+            }
+        }
+
+        // Feedback banner floating below choices
+        if let Some(fb) = feedback {
+            let fb_color = if fb.is_correct {
+                "#10b981"
+            } else {
+                "#ef4444"
             };
-            let _ = ctx.fill_text(header, card_x + 40.0, card_y + 305.0);
-            ctx.set_font("13px sans-serif");
-            let _ = ctx.fill_text(&fb.explanation, card_x + 40.0, card_y + 328.0);
+            draw_rounded_rect(
+                ctx,
+                choice_x,
+                380.0,
+                choice_w,
+                48.0,
+                8.0,
+                fb_color,
+                "#ffffff",
+                2.0,
+            );
+            ctx.set_fill_style_str("#ffffff");
+            ctx.set_font("bold 14px sans-serif");
+            let prefix = if fb.is_correct {
+                "✓ OIKEIN! (+150 pistettä): "
+            } else {
+                "✗ VÄÄRIN! (-20 kuntoa): "
+            };
+            let _ = ctx.fill_text(
+                &format!("{}{}", prefix, fb.explanation),
+                choice_x + 16.0,
+                410.0,
+            );
         }
     }
 

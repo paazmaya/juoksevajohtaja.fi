@@ -20,12 +20,16 @@ test.describe("Juokseva Johtaja 2D Running Game UI", () => {
     await page.goto("/game/");
   });
 
-  test("loads game canvas and controls header", async ({ page }) => {
+  test("loads full-screen canvas and in-game UI with back link and instructions button", async ({ page }) => {
     const canvas = page.locator("#game-canvas");
     await expect(canvas).toBeVisible();
 
-    const backLink = page.locator('header a[href="/"]');
+    const backLink = page.locator("#btn-back-link");
     await expect(backLink).toBeVisible();
+    await expect(backLink).toHaveAttribute("href", "/");
+
+    const instructionsBtn = page.locator("#btn-instructions");
+    await expect(instructionsBtn).toBeVisible();
 
     const stateLabel = page.locator("#game-state-label");
     await expect(stateLabel).toBeVisible();
@@ -38,35 +42,78 @@ test.describe("Juokseva Johtaja 2D Running Game UI", () => {
     await expect(scoreValue).toHaveText("0");
   });
 
-  test("starts running on space key press and updates distance/score", async ({ page }) => {
+  test("opens and closes the dimmed About / Instructions overlay", async ({ page }) => {
+    const aboutOverlay = page.locator("#about-overlay");
+    const instructionsBtn = page.locator("#btn-instructions");
+    const closeBtn = page.locator("#btn-close-about");
+    const continueBtn = page.locator("#btn-about-continue");
+
+    // Initially hidden
+    await expect(aboutOverlay).toHaveClass(/hidden/);
+
+    // Open overlay
+    await instructionsBtn.click();
+    await expect(aboutOverlay).not.toHaveClass(/hidden/);
+    await expect(page.locator("#about-title")).toContainText("Juokseva Johtaja");
+    await expect(page.locator(".about-body")).toContainText("Nuoli oikealle");
+
+    // Close overlay with close button
+    await closeBtn.click();
+    await expect(aboutOverlay).toHaveClass(/hidden/);
+
+    // Reopen and close with continue button
+    await instructionsBtn.click();
+    await expect(aboutOverlay).not.toHaveClass(/hidden/);
+    await continueBtn.click();
+    await expect(aboutOverlay).toHaveClass(/hidden/);
+
+    // Reopen and close with ESC key
+    await instructionsBtn.click();
+    await expect(aboutOverlay).not.toHaveClass(/hidden/);
+    await page.keyboard.press("Escape");
+    await expect(aboutOverlay).toHaveClass(/hidden/);
+  });
+
+  test("runners only move via arrow keys (not automatically)", async ({ page }) => {
     const stateLabel = page.locator("#game-state-label");
     const distanceValue = page.locator("#distance-value");
     const canvas = page.locator("#game-canvas");
 
     await expect(stateLabel).toHaveText("START");
 
-    // Click canvas or press Space to start
+    // Click canvas to start
     await canvas.click();
-    await page.keyboard.press("Space");
-
-    // State changes to RUNNING
     await expect(stateLabel).toHaveText("RUNNING", { timeout: 5000 });
 
-    // Distance should increase as the runner moves forward
+    // With no arrow keys pressed, distance should NOT move automatically
+    await page.waitForTimeout(400);
+    const initialDist = Number.parseInt((await distanceValue.textContent()) || "0", 10);
+    expect(initialDist).toBe(0);
+
+    // Hold ArrowRight: distance should now increase
+    await page.keyboard.down("ArrowRight");
     await expect(async () => {
-      const dist = Number.parseInt((await distanceValue.textContent()) || "0", 10);
-      expect(dist).toBeGreaterThan(0);
+      const currentDist = Number.parseInt((await distanceValue.textContent()) || "0", 10);
+      expect(currentDist).toBeGreaterThan(0);
     }).toPass({ timeout: 5000 });
+
+    // Release ArrowRight: distance stops advancing
+    await page.keyboard.up("ArrowRight");
+    await page.waitForTimeout(200);
+    const pausedDist = Number.parseInt((await distanceValue.textContent()) || "0", 10);
+    await page.waitForTimeout(300);
+    const afterPauseDist = Number.parseInt((await distanceValue.textContent()) || "0", 10);
+    expect(afterPauseDist).toBe(pausedDist);
   });
 
-  test("quiz overlay modal elements exist and are accessible", async ({ page }) => {
-    const quizOverlay = page.locator("#quiz-overlay");
+  test("in-game quiz interactive elements exist within the game", async ({ page }) => {
+    const quizLayer = page.locator("#quiz-interactive-layer");
     const questionText = page.locator("#quiz-question-text");
     const choiceA = page.locator("#btn-choice-a");
     const choiceB = page.locator("#btn-choice-b");
 
     // Initially hidden until checkpoint is reached
-    await expect(quizOverlay).toHaveClass(/hidden/);
+    await expect(quizLayer).toHaveClass(/hidden/);
     await expect(questionText).toBeAttached();
     await expect(choiceA).toBeAttached();
     await expect(choiceB).toBeAttached();
@@ -88,14 +135,29 @@ test.describe("Juokseva Johtaja 2D Running Game UI", () => {
     }
   });
 
-  test("touch jump button is functional", async ({ page }) => {
-    const jumpButton = page.locator("#btn-jump-touch");
-    await expect(jumpButton).toBeVisible();
-
+  test("on-screen touch buttons for arrows and jump are functional", async ({ page }) => {
     const stateLabel = page.locator("#game-state-label");
+    const distanceValue = page.locator("#distance-value");
+    const btnRight = page.locator("#btn-touch-right");
+    const btnJump = page.locator("#btn-jump-touch");
+
+    await expect(btnRight).toBeVisible();
+    await expect(btnJump).toBeVisible();
     await expect(stateLabel).toHaveText("START");
 
-    await jumpButton.click();
+    // Touch right button triggers start and movement
+    await btnRight.dispatchEvent("pointerdown");
     await expect(stateLabel).toHaveText("RUNNING", { timeout: 5000 });
+
+    await expect(async () => {
+      const dist = Number.parseInt((await distanceValue.textContent()) || "0", 10);
+      expect(dist).toBeGreaterThan(0);
+    }).toPass({ timeout: 5000 });
+
+    await btnRight.dispatchEvent("pointerup");
+
+    // Touch jump button triggers jump
+    await btnJump.click();
+    await expect(stateLabel).toHaveText("RUNNING");
   });
 });

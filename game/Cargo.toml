@@ -21,6 +21,7 @@ features = [
   "Element",
   "HtmlElement",
   "HtmlCanvasElement",
+  "DomRect",
   "CanvasRenderingContext2d",
   "CanvasGradient",
   "TextMetrics",
