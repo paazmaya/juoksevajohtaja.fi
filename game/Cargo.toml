@@ -1,0 +1,39 @@
+[package]
+name = "juokseva-johtaja-game"
+version = "0.1.0"
+edition = "2021"
+description = "Running game for the Juokseva Johtaja podcast"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+js-sys = "0.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+  "Window",
+  "Document",
+  "Element",
+  "HtmlElement",
+  "HtmlCanvasElement",
+  "CanvasRenderingContext2d",
+  "CanvasGradient",
+  "TextMetrics",
+  "DomTokenList",
+  "KeyboardEvent",
+  "MouseEvent",
+  "TouchEvent",
+  "Performance",
+  "AudioContext",
+  "AudioContextState",
+  "AudioParam",
+  "OscillatorNode",
+  "OscillatorType",
+  "GainNode",
+  "AudioDestinationNode",
+]

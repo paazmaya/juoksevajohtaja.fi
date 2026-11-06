@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="fi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Juokseva Johtaja - Podcast Runner Game</title>
+    <link data-trunk rel="rust" href="Cargo.toml" />
+    <link data-trunk rel="copy-dir" href="assets" />
+    <style>
+      :root {
+        --bg-color: #121824;
+        --card-bg: #1e293b;
+        --primary: #ff5e57;
+        --secondary: #0984e3;
+        --accent: #ffd32a;
+        --text: #f8fafc;
+        --text-muted: #94a3b8;
+        --success: #2ed573;
+        --danger: #ff4757;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        padding: 12px;
+      }
+
+      header {
+        width: 100%;
+        max-width: 960px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        padding: 0 4px;
+      }
+
+      header a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 0.95rem;
+      }
+
+      header a:hover {
+        text-decoration: underline;
+      }
+
+      .game-container {
+        position: relative;
+        width: 100%;
+        max-width: 960px;
+        aspect-ratio: 16 / 9;
+        background: #000;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+      }
+
+      canvas#game-canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        outline: none;
+      }
+
+      /* Quiz HTML Overlay (Accessible & Playwright-testable) */
+      #quiz-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.88);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 24px;
+        z-index: 10;
+      }
+
+      #quiz-overlay.hidden {
+        display: none !important;
+      }
+
+      .quiz-card {
+        background: #ffffff;
+        color: #1e293b;
+        width: 100%;
+        max-width: 680px;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        border: 3px solid #f97316;
+      }
+
+      .quiz-header {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 800;
+        color: #ea580c;
+        margin-bottom: 8px;
+      }
+
+      #quiz-question-text {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        line-height: 1.4;
+      }
+
+      .quiz-choices {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .btn-choice {
+        background: #f1f5f9;
+        border: 2px solid #cbd5e1;
+        color: #0f172a;
+        padding: 14px 18px;
+        border-radius: 8px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .btn-choice:hover {
+        background: #e2e8f0;
+        border-color: #f97316;
+        transform: translateY(-1px);
+      }
+
+      #quiz-feedback-box {
+        margin-top: 16px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      #quiz-feedback-box.hidden {
+        display: none;
+      }
+
+      /* Control and HUD strip */
+      .controls-bar {
+        width: 100%;
+        max-width: 960px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--card-bg);
+        margin-top: 12px;
+        padding: 12px 18px;
+        border-radius: 8px;
+        font-size: 0.95rem;
+      }
+
+      .hud-stats {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+      }
+
+      .badge {
+        background: #334155;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .btn-jump {
+        background: var(--primary);
+        color: #ffffff;
+        border: none;
+        padding: 10px 24px;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.1s ease;
+      }
+
+      .btn-jump:active {
+        transform: scale(0.96);
+      }
+
+      .instructions-panel {
+        width: 100%;
+        max-width: 960px;
+        margin-top: 16px;
+        background: rgba(30, 41, 59, 0.5);
+        padding: 16px 20px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+
+      .instructions-panel strong {
+        color: var(--text);
+      }
+
+      @media (max-width: 600px) {
+        .controls-bar {
+          flex-direction: column;
+          gap: 10px;
+        }
+        #quiz-question-text {
+          font-size: 1.1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/">← Takaisin Juokseva Johtaja -sivustolle</a>
+      <span>🎙️ Podcast Runner 2D</span>
+    </header>
+
+    <div class="game-container">
+      <canvas id="game-canvas" width="960" height="540"></canvas>
+
+      <!-- Accessible / Playwright-interactive Quiz Modal -->
+      <div id="quiz-overlay" class="hidden" role="dialog" aria-modal="true" aria-labelledby="quiz-question-text">
+        <div class="quiz-card">
+          <div class="quiz-header">🎙️ Jakson Kysymysrasti</div>
+          <div id="quiz-question-text">Ladataan kysymystä...</div>
+          <div class="quiz-choices">
+            <button id="btn-choice-a" class="btn-choice">[1] Vaihtoehto A</button>
+            <button id="btn-choice-b" class="btn-choice">[2] Vaihtoehto B</button>
+          </div>
+          <div id="quiz-feedback-box" class="hidden"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-bar">
+      <div class="hud-stats">
+        <span>Tila: <strong id="game-state-label" class="badge">START</strong></span>
+        <span>Matka: <strong id="distance-value">0</strong>m</span>
+        <span>Pisteet: <strong id="score-value">0</strong></span>
+      </div>
+      <button id="btn-jump-touch" class="btn-jump">Hyppää [VÄLILYÖNTI]</button>
+    </div>
+
+    <div class="instructions-panel">
+      <p>
+        <strong>Ohjaimet:</strong> <strong>Välilyönti</strong> tai <strong>Nuoli ylös</strong> = Hyppy esteiden yli |
+        <strong>1</strong> ja <strong>2</strong> = Vastaa rasteilla podcast-kysymyksiin |
+        <strong>R</strong> = Uudelleenkäynnistys
+      </p>
+      <p>
+        Pelaat haastateltavana johtajana. Isäntä Jukka Paasonen juoksee rinnalla ja tarjoaa välillä peesi- ja kahviapua,
+        välillä yllättäviä kalenterikutsuja ja tuotantohälytyksiä. Kysymysrasteilla eteneminen vaatii podcast-jakson tietämystä!
+      </p>
+    </div>
+  </body>
+</html>

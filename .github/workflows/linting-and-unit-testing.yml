@@ -25,14 +25,26 @@ jobs:
       with:
         node-version: '24.x'
 
-    - name: Install Node.js dependencies
-      run: npm ci --ignore-scripts
+    - name: Set up Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: wasm32-unknown-unknown
 
-    - name: Lint and test
+    - name: Install Trunk
       run: |
-        npm run lint
-        npm test
+        curl -sSL https://github.com/trunk-rs/trunk/releases/download/v0.22.1/trunk-x86_64-unknown-linux-gnu.tar.gz | sudo tar -xzf- -C /usr/local/bin
+
+    - name: Install Node.js dependencies
+      run: npm ci --ignore-scripts --registry=https://registry.npmjs.com
+
+    - name: Install Playwright browsers
+      run: npx --registry=https://registry.npmjs.com playwright install --with-deps chromium
+
+    - name: Lint
+      run: npm run lint
 
     - name: Build
-      run: |
-        npm run build
+      run: npm run build
+
+    - name: Test
+      run: npm test

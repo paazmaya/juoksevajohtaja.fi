@@ -1,0 +1,111 @@
+{
+  "id": "1-1-undisclosed",
+  "title": "Kausi 1 - Jakso 1 - Undisclosed",
+  "podcastUrl": "/1-1-undisclosed/",
+  "trackLength": 1800,
+  "guest": {
+    "name": "Haastateltava Johtaja",
+    "title": "Esihenkilö & Ohjelmistojohtaja",
+    "speed": 260.0,
+    "sprite": "Adventurer"
+  },
+  "host": {
+    "name": "Jukka Paasonen",
+    "title": "Juokseva Johtaja",
+    "speed": 255.0,
+    "sprite": "Player"
+  },
+  "checkpoints": [
+    {
+      "id": "q1",
+      "distance": 450,
+      "question": "Mikä on johtajan tärkein tehtävä tiimin onnistumisen mahdollistamisessa?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Psykologisen turvallisuuden ja luottamuksen rakentaminen",
+          "isCorrect": true
+        },
+        {
+          "id": "B",
+          "text": "Jokaisen koodirivin ja työminuutin tarkka valvonta",
+          "isCorrect": false
+        }
+      ],
+      "podcastTimestamp": "08:15",
+      "explanation": "Jaksossa korostettiin luottamusta: tiimi loistaa kun esteet poistetaan ja epäonnistumisia ei pelätä."
+    },
+    {
+      "id": "q2",
+      "distance": 950,
+      "question": "Miten asiantuntijasta esihenkilöksi siirtyvä välttää yleisimmän sudenkuopan?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Tekemällä kaikki vaikeat arkkitehtuuripäätökset itse",
+          "isCorrect": false
+        },
+        {
+          "id": "B",
+          "text": "Luopumalla omasta koodauksesta ja keskittymällä muiden tukemiseen",
+          "isCorrect": true
+        }
+      ],
+      "podcastTimestamp": "17:40",
+      "explanation": "Oman koodausidentiteetin irtipäästäminen on monelle vastanimitetylle johtajalle suurin kasvuaskel."
+    },
+    {
+      "id": "q3",
+      "distance": 1450,
+      "question": "Miksi yhteinen juoksulenkki toimii hyvänä haastattelu- ja 1-on-1-alustana?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Liike avaa ajattelua ja poistaa neukkarin hierarkiat",
+          "isCorrect": true
+        },
+        {
+          "id": "B",
+          "text": "Koska juostessa toinen ei pääse karkuun hankalia kysymyksiä",
+          "isCorrect": false
+        }
+      ],
+      "podcastTimestamp": "26:30",
+      "explanation": "Vierekkäin juokseminen kääntää keskustelun yhteiseen suuntaan katsekontaktin pakottamisen sijaan."
+    }
+  ],
+  "obstacles": [
+    { "distance": 250, "kind": "hurdle", "width": 40, "height": 45 },
+    { "distance": 700, "kind": "cactus", "width": 40, "height": 55 },
+    { "distance": 1200, "kind": "meeting", "width": 45, "height": 45 },
+    { "distance": 1650, "kind": "hurdle", "width": 40, "height": 45 }
+  ],
+  "pickups": [
+    { "distance": 150, "kind": "coffee", "value": 30 },
+    { "distance": 600, "kind": "podcast_mic", "value": 50 },
+    { "distance": 1100, "kind": "coffee", "value": 30 },
+    { "distance": 1350, "kind": "podcast_mic", "value": 50 }
+  ],
+  "hostEvents": [
+    {
+      "distance": 180,
+      "action": "help",
+      "dialogue": "Ota kahvia! Tänään edessä pitkä lenkki ja hyviä ajatuksia."
+    },
+    {
+      "distance": 650,
+      "action": "sabotage",
+      "dialogue": "Yllättävä kalenterikutsu! Hyppää äkkiä yli!"
+    },
+    {
+      "distance": 1150,
+      "action": "help",
+      "dialogue": "Hyvää vauhtia! Annan sinulle peesiapua."
+    },
+    {
+      "distance": 1400,
+      "action": "sabotage",
+      "dialogue": "Tuotanto-ongelma hälyttää! Pysy tarkkana!"
+    }
+  ]
+}

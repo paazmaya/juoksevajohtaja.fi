@@ -10,3 +10,5 @@ Juokseva Johtaja on podcast, jossa juoksulenkin lomassa haastatellaan ohjelmisto
 Ensimmäisellä kaudella käydään läpi johtamisen ammattilaisia, jotka ovat työskennelleet podcastin vetäjän, Jukka Paasosen esihenkilöinä.
 
 [Twitterissä @juoksevajohtaja](https://twitter.com/juoksevajohtaja).
+
+[Pelaa podcast-juoksupeliä](/game/)

@@ -1,0 +1,60 @@
+{
+  "$schema": "./level-schema.json",
+  "id": "season-episode-slug",
+  "title": "Kausi X - Jakso Y - Vieraan Nimi",
+  "podcastUrl": "/x-y-slug/",
+  "trackLength": 1800,
+  "guest": {
+    "name": "Vieraan Nimi",
+    "title": "Rooli / Yritys",
+    "speed": 260.0,
+    "sprite": "Adventurer"
+  },
+  "host": {
+    "name": "Jukka Paasonen",
+    "title": "Juokseva Johtaja",
+    "speed": 255.0,
+    "sprite": "Player"
+  },
+  "checkpoints": [
+    {
+      "id": "q1",
+      "distance": 500,
+      "question": "Kysymys, johon vastaus löytyy podcast-jaksosta?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Oikea vaihtoehto podcastin pohjalta",
+          "isCorrect": true
+        },
+        {
+          "id": "B",
+          "text": "Väärä / humoristinen vaihtoehto",
+          "isCorrect": false
+        }
+      ],
+      "podcastTimestamp": "12:30",
+      "explanation": "Lyhyt selitys miksi vastaus on oikein ja mihin jaksossa viitattiin."
+    }
+  ],
+  "obstacles": [
+    { "distance": 300, "kind": "hurdle", "width": 40, "height": 45 },
+    { "distance": 800, "kind": "meeting", "width": 45, "height": 45 }
+  ],
+  "pickups": [
+    { "distance": 200, "kind": "coffee", "value": 30 },
+    { "distance": 700, "kind": "podcast_mic", "value": 50 }
+  ],
+  "hostEvents": [
+    {
+      "distance": 220,
+      "action": "help",
+      "dialogue": "Tässä hörppy vettä ja vinkki tulevasta aiheesta!"
+    },
+    {
+      "distance": 750,
+      "action": "sabotage",
+      "dialogue": "Pikainen Teams-palaveri esteenä, hyppää!"
+    }
+  ]
+}
