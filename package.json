@@ -10,8 +10,8 @@
     "build": "npm run build:site && npm run build:game",
     "start": "npx @11ty/eleventy --serve",
     "serve:game": "cd game && trunk serve",
-    "lint": "npx biome check .eleventy.js",
-    "format": "npx biome format .eleventy.js",
+    "lint": "oxfmt --check",
+    "format": "oxfmt",
     "test:cargo": "cargo test --manifest-path game/Cargo.toml",
     "pretest:e2e": "npm run build",
     "test:e2e": "playwright test",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "3.1.8",
-    "@biomejs/biome": "2.6.5",
-    "@playwright/test": "^1.50.0"
+    "@playwright/test": "^1.50.0",
+    "oxfmt": "0.70.0"
   }
 }
