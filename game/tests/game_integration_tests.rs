@@ -73,9 +73,10 @@ fn test_pickup_collection() {
     // Drain some stamina to test replenishment
     game.player.stamina = 50.0;
 
-    // Simulate running past the first pickup (located at ~150m)
-    for _ in 0..25 {
-        game.update(0.05); // ~1.25s of running at ~260px/s => ~325px
+    // Simulate running past the first pickup
+    let first_pickup_dist = game.active_pickups[0].distance;
+    while game.distance < first_pickup_dist + 50.0 {
+        game.update(0.05);
     }
 
     // Pickup should have been consumed
@@ -91,9 +92,9 @@ fn test_quiz_checkpoint_correct_answer_advances_game() {
     game.start();
     game.input.right = true;
 
-    // First checkpoint is at distance 450
-    // Advance game until quiz triggers
-    while game.distance < 450.0 && game.state == GameState::Running {
+    // First checkpoint
+    let first_cp_dist = game.level.checkpoints[0].distance;
+    while game.distance < first_cp_dist && game.state == GameState::Running {
         game.update(0.05);
     }
 
@@ -109,7 +110,7 @@ fn test_quiz_checkpoint_correct_answer_advances_game() {
     // Elapse feedback timer to return to running
     game.update(2.1);
     assert_eq!(game.state, GameState::Running);
-    assert!(game.distance >= 450.0);
+    assert!(game.distance >= first_cp_dist);
 }
 
 #[test]
@@ -119,8 +120,9 @@ fn test_quiz_checkpoint_wrong_answer_penalizes_and_retries() {
     game.start();
     game.input.right = true;
 
-    // Advance until checkpoint 1 (dist 450)
-    while game.distance < 450.0 && game.state == GameState::Running {
+    // Advance until checkpoint 1
+    let first_cp_dist = game.level.checkpoints[0].distance;
+    while game.distance < first_cp_dist && game.state == GameState::Running {
         game.update(0.05);
     }
 
@@ -136,7 +138,7 @@ fn test_quiz_checkpoint_wrong_answer_penalizes_and_retries() {
     // Elapse feedback timer: player distance is pushed back slightly to retry
     game.update(2.1);
     assert_eq!(game.state, GameState::Running);
-    assert!(game.distance < 450.0);
+    assert!(game.distance < first_cp_dist);
 }
 
 #[test]

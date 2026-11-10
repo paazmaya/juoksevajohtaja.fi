@@ -3,23 +3,28 @@
   "id": "season-episode-slug",
   "title": "Kausi X - Jakso Y - Vieraan Nimi",
   "podcastUrl": "/x-y-slug/",
-  "trackLength": 1800,
+  "trackLength": 12000,
+  "background": {
+    "layer1": "assets/backgrounds/helsinki/layer1_sky.png",
+    "layer2": "assets/backgrounds/helsinki/layer2_midground.png",
+    "layer3": "assets/backgrounds/helsinki/layer3_foreground.png"
+  },
   "guest": {
     "name": "Vieraan Nimi",
     "title": "Rooli / Yritys",
-    "speed": 260.0,
+    "speed": 100.0,
     "sprite": "Adventurer"
   },
   "host": {
     "name": "Jukka Paasonen",
     "title": "Juokseva Johtaja",
-    "speed": 255.0,
+    "speed": 98.0,
     "sprite": "Player"
   },
   "checkpoints": [
     {
       "id": "q1",
-      "distance": 500,
+      "distance": 3000,
       "question": "Kysymys, johon vastaus löytyy podcast-jaksosta?",
       "options": [
         {

@@ -2,23 +2,28 @@
   "id": "1-1-undisclosed",
   "title": "Kausi 1 - Jakso 1 - Undisclosed",
   "podcastUrl": "/1-1-undisclosed/",
-  "trackLength": 1800,
+  "trackLength": 12000,
+  "background": {
+    "layer1": "assets/backgrounds/helsinki/layer1_sky.png",
+    "layer2": "assets/backgrounds/helsinki/layer2_midground.png",
+    "layer3": "assets/backgrounds/helsinki/layer3_foreground.png"
+  },
   "guest": {
     "name": "Haastateltava Johtaja",
     "title": "Esihenkilö & Ohjelmistojohtaja",
-    "speed": 260.0,
+    "speed": 100.0,
     "sprite": "Adventurer"
   },
   "host": {
     "name": "Jukka Paasonen",
     "title": "Juokseva Johtaja",
-    "speed": 255.0,
+    "speed": 98.0,
     "sprite": "Player"
   },
   "checkpoints": [
     {
       "id": "q1",
-      "distance": 450,
+      "distance": 3000,
       "question": "Mikä on johtajan tärkein tehtävä tiimin onnistumisen mahdollistamisessa?",
       "options": [
         {
@@ -37,7 +42,7 @@
     },
     {
       "id": "q2",
-      "distance": 950,
+      "distance": 6500,
       "question": "Miten asiantuntijasta esihenkilöksi siirtyvä välttää yleisimmän sudenkuopan?",
       "options": [
         {
@@ -56,7 +61,7 @@
     },
     {
       "id": "q3",
-      "distance": 1450,
+      "distance": 9800,
       "question": "Miksi yhteinen juoksulenkki toimii hyvänä haastattelu- ja 1-on-1-alustana?",
       "options": [
         {
@@ -75,37 +80,93 @@
     }
   ],
   "obstacles": [
-    { "distance": 250, "kind": "hurdle", "width": 40, "height": 45 },
-    { "distance": 700, "kind": "cactus", "width": 40, "height": 55 },
-    { "distance": 1200, "kind": "meeting", "width": 45, "height": 45 },
-    { "distance": 1650, "kind": "hurdle", "width": 40, "height": 45 }
+    { "distance": 650, "kind": "hurdle", "width": 35, "height": 42 },
+    { "distance": 1400, "kind": "cactus", "width": 35, "height": 45 },
+    { "distance": 2200, "kind": "meeting", "width": 40, "height": 42 },
+    { "distance": 3600, "kind": "hurdle", "width": 35, "height": 42 },
+    { "distance": 4400, "kind": "meeting", "width": 40, "height": 42 },
+    { "distance": 5200, "kind": "cactus", "width": 35, "height": 45 },
+    { "distance": 5900, "kind": "hurdle", "width": 35, "height": 42 },
+    { "distance": 7100, "kind": "meeting", "width": 40, "height": 42 },
+    { "distance": 7900, "kind": "cactus", "width": 35, "height": 45 },
+    { "distance": 8700, "kind": "hurdle", "width": 35, "height": 42 },
+    { "distance": 9300, "kind": "meeting", "width": 40, "height": 42 },
+    { "distance": 10300, "kind": "hurdle", "width": 35, "height": 42 },
+    { "distance": 11000, "kind": "cactus", "width": 35, "height": 45 },
+    { "distance": 11600, "kind": "meeting", "width": 40, "height": 42 }
   ],
   "pickups": [
-    { "distance": 150, "kind": "coffee", "value": 30 },
-    { "distance": 600, "kind": "podcast_mic", "value": 50 },
-    { "distance": 1100, "kind": "coffee", "value": 30 },
-    { "distance": 1350, "kind": "podcast_mic", "value": 50 }
+    { "distance": 200, "kind": "coffee", "value": 30 },
+    { "distance": 1000, "kind": "podcast_mic", "value": 50 },
+    { "distance": 1800, "kind": "coffee", "value": 30 },
+    { "distance": 2600, "kind": "podcast_mic", "value": 50 },
+    { "distance": 3300, "kind": "coffee", "value": 30 },
+    { "distance": 4000, "kind": "podcast_mic", "value": 50 },
+    { "distance": 4800, "kind": "coffee", "value": 30 },
+    { "distance": 5600, "kind": "podcast_mic", "value": 50 },
+    { "distance": 6800, "kind": "coffee", "value": 30 },
+    { "distance": 7500, "kind": "podcast_mic", "value": 50 },
+    { "distance": 8300, "kind": "coffee", "value": 30 },
+    { "distance": 9000, "kind": "podcast_mic", "value": 50 },
+    { "distance": 10100, "kind": "coffee", "value": 30 },
+    { "distance": 10700, "kind": "podcast_mic", "value": 50 },
+    { "distance": 11300, "kind": "coffee", "value": 30 }
   ],
   "hostEvents": [
     {
-      "distance": 180,
+      "distance": 100,
       "action": "help",
-      "dialogue": "Ota kahvia! Tänään edessä pitkä lenkki ja hyviä ajatuksia."
+      "dialogue": "Tervetuloa lenkille! Tänään edessä 12 kilometrin yhteislenkki ja hyviä johtajuusajatuksia."
     },
     {
-      "distance": 650,
+      "distance": 1200,
       "action": "sabotage",
-      "dialogue": "Yllättävä kalenterikutsu! Hyppää äkkiä yli!"
+      "dialogue": "Yllättävä kalenterikutsu ilmestyi esteeksi! Hyppää äkkiä yli!"
     },
     {
-      "distance": 1150,
+      "distance": 2500,
       "action": "help",
-      "dialogue": "Hyvää vauhtia! Annan sinulle peesiapua."
+      "dialogue": "Ensimmäinen väliaikapiste lähestyy! Muistatko mitä jaksossa puhuttiin luottamuksesta?"
     },
     {
-      "distance": 1400,
+      "distance": 3200,
+      "action": "help",
+      "dialogue": "Loistava vastaus! Pidetään sama hyvä ja tasainen juoksurytmi."
+    },
+    {
+      "distance": 4200,
       "action": "sabotage",
-      "dialogue": "Tuotanto-ongelma hälyttää! Pysy tarkkana!"
+      "dialogue": "Kiireellinen Teams-palaveri keskeyttää lenkin! Hyppy valmiiksi!"
+    },
+    {
+      "distance": 5500,
+      "action": "help",
+      "dialogue": "Puoliväli häämöttää. Annan sinulle vähän peesiapua tähän loivaan nousuun."
+    },
+    {
+      "distance": 6700,
+      "action": "help",
+      "dialogue": "Juuri niin, asiantuntijasta johtajaksi kasvaminen vaatii luopumista."
+    },
+    {
+      "distance": 7800,
+      "action": "sabotage",
+      "dialogue": "Tuotanto-ongelma hälyttää päivystyspuhelimessa! Pysy tarkkana esteen kanssa!"
+    },
+    {
+      "distance": 8900,
+      "action": "help",
+      "dialogue": "Viimeinen neljännes käynnistyy! Kohta päästään kolmannelle kysymysportille."
+    },
+    {
+      "distance": 10000,
+      "action": "help",
+      "dialogue": "Hienoa, kaikki kysymykset ratkaistu! Nyt loppukiri kohti 12 kilometrin maalia!"
+    },
+    {
+      "distance": 11400,
+      "action": "sabotage",
+      "dialogue": "Viimeiset esteet ennen maaliviivaa, älä anna vauhdin herpaantua!"
     }
   ]
 }

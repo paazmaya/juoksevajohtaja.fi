@@ -1,3 +1,5 @@
+//! WebAssembly browser entry point, DOM event listeners, and main animation loop for Juokseva Johtaja.
+
 pub mod audio;
 pub mod game;
 pub mod level;
@@ -20,8 +22,21 @@ use crate::game::{AudioCue, Game, GameState};
 #[cfg(target_arch = "wasm32")]
 use crate::level::Level;
 #[cfg(target_arch = "wasm32")]
-use crate::render::Renderer;
+use crate::render::{
+    Renderer, QUIZ_CHOICE_A_Y, QUIZ_CHOICE_BOX_HEIGHT, QUIZ_CHOICE_BOX_WIDTH, QUIZ_CHOICE_BOX_X,
+    QUIZ_CHOICE_B_Y, QUIZ_CLICK_TOLERANCE,
+};
 
+/// Milliseconds in one second for performance timestamp conversions.
+pub const MILLISECONDS_PER_SECOND: f64 = 1000.0;
+
+/// Minimum delta time per animation frame in seconds (avoids zero or negative dt).
+pub const MIN_FRAME_DELTA_SECONDS: f64 = 0.001;
+
+/// Maximum delta time clamped per animation frame in seconds (prevents physics explosion after tab switch).
+pub const MAX_FRAME_DELTA_SECONDS: f64 = 0.1;
+
+/// WebAssembly entry point initializing canvas context, game loops, and keyboard/touch event handlers.
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen(start)]
 pub fn start_game() -> Result<(), JsValue> {
@@ -42,8 +57,8 @@ pub fn start_game() -> Result<(), JsValue> {
     let height = canvas.height() as f64;
 
     let default_level = Level::default_episode_1();
+    let renderer = Renderer::new(width, height, Some(&default_level));
     let game = Rc::new(RefCell::new(Game::new(default_level)));
-    let renderer = Renderer::new(width, height);
     let sound = Rc::new(RefCell::new(SoundManager::new()));
 
     // Synchronize DOM UI overlay elements if present (for Playwright testing and accessibility)
@@ -194,10 +209,7 @@ pub fn start_game() -> Result<(), JsValue> {
                 }
             },
         );
-        window.add_event_listener_with_callback(
-            "keyup",
-            keyup_closure.as_ref().unchecked_ref(),
-        )?;
+        window.add_event_listener_with_callback("keyup", keyup_closure.as_ref().unchecked_ref())?;
         keyup_closure.forget();
     }
 
@@ -210,10 +222,7 @@ pub fn start_game() -> Result<(), JsValue> {
             g.input.left = false;
             g.input.up = false;
         });
-        window.add_event_listener_with_callback(
-            "blur",
-            blur_closure.as_ref().unchecked_ref(),
-        )?;
+        window.add_event_listener_with_callback("blur", blur_closure.as_ref().unchecked_ref())?;
         blur_closure.forget();
     }
 
@@ -235,10 +244,17 @@ pub fn start_game() -> Result<(), JsValue> {
                     g.start();
                 } else if matches!(g.state, GameState::Quiz { .. }) {
                     // Check if clicked choice A or B on canvas
-                    if click_x >= 280.0 && click_x <= 880.0 {
-                        if click_y >= 210.0 && click_y <= 290.0 {
+                    let choice_left = QUIZ_CHOICE_BOX_X - QUIZ_CLICK_TOLERANCE * 2.0;
+                    let choice_right = QUIZ_CHOICE_BOX_X + QUIZ_CHOICE_BOX_WIDTH;
+                    let a_top = QUIZ_CHOICE_A_Y - QUIZ_CLICK_TOLERANCE;
+                    let a_bottom = QUIZ_CHOICE_A_Y + QUIZ_CHOICE_BOX_HEIGHT + QUIZ_CLICK_TOLERANCE;
+                    let b_top = QUIZ_CHOICE_B_Y - QUIZ_CLICK_TOLERANCE;
+                    let b_bottom = QUIZ_CHOICE_B_Y + QUIZ_CHOICE_BOX_HEIGHT + QUIZ_CLICK_TOLERANCE;
+
+                    if click_x >= choice_left && click_x <= choice_right {
+                        if click_y >= a_top && click_y <= a_bottom {
                             g.answer_quiz("A");
-                        } else if click_y >= 295.0 && click_y <= 375.0 {
+                        } else if click_y >= b_top && click_y <= b_bottom {
                             g.answer_quiz("B");
                         }
                     }
@@ -317,10 +333,18 @@ pub fn start_game() -> Result<(), JsValue> {
                     g.borrow_mut().input.left = false;
                 }
             });
-            btn_left.add_event_listener_with_callback("pointerdown", cb_down.as_ref().unchecked_ref())?;
-            btn_left.add_event_listener_with_callback("pointerup", cb_up.as_ref().unchecked_ref())?;
-            btn_left.add_event_listener_with_callback("pointercancel", cb_up.as_ref().unchecked_ref())?;
-            btn_left.add_event_listener_with_callback("pointerleave", cb_up.as_ref().unchecked_ref())?;
+            btn_left.add_event_listener_with_callback(
+                "pointerdown",
+                cb_down.as_ref().unchecked_ref(),
+            )?;
+            btn_left
+                .add_event_listener_with_callback("pointerup", cb_up.as_ref().unchecked_ref())?;
+            btn_left.add_event_listener_with_callback(
+                "pointercancel",
+                cb_up.as_ref().unchecked_ref(),
+            )?;
+            btn_left
+                .add_event_listener_with_callback("pointerleave", cb_up.as_ref().unchecked_ref())?;
             cb_down.forget();
             cb_up.forget();
         }
@@ -344,10 +368,18 @@ pub fn start_game() -> Result<(), JsValue> {
                     g.borrow_mut().input.right = false;
                 }
             });
-            btn_right.add_event_listener_with_callback("pointerdown", cb_down.as_ref().unchecked_ref())?;
-            btn_right.add_event_listener_with_callback("pointerup", cb_up.as_ref().unchecked_ref())?;
-            btn_right.add_event_listener_with_callback("pointercancel", cb_up.as_ref().unchecked_ref())?;
-            btn_right.add_event_listener_with_callback("pointerleave", cb_up.as_ref().unchecked_ref())?;
+            btn_right.add_event_listener_with_callback(
+                "pointerdown",
+                cb_down.as_ref().unchecked_ref(),
+            )?;
+            btn_right
+                .add_event_listener_with_callback("pointerup", cb_up.as_ref().unchecked_ref())?;
+            btn_right.add_event_listener_with_callback(
+                "pointercancel",
+                cb_up.as_ref().unchecked_ref(),
+            )?;
+            btn_right
+                .add_event_listener_with_callback("pointerleave", cb_up.as_ref().unchecked_ref())?;
             cb_down.forget();
             cb_up.forget();
         }
@@ -388,15 +420,17 @@ pub fn start_game() -> Result<(), JsValue> {
 
         if let Some(about_modal) = document.get_element_by_id("about-overlay") {
             let modal_ref = about_modal.clone();
-            let cb = Closure::<dyn FnMut(web_sys::MouseEvent)>::new(move |event: web_sys::MouseEvent| {
-                if let Some(target) = event.target() {
-                    if let Ok(target_el) = target.dyn_into::<web_sys::Element>() {
-                        if target_el.id() == "about-overlay" {
-                            let _ = modal_ref.class_list().add_1("hidden");
+            let cb = Closure::<dyn FnMut(web_sys::MouseEvent)>::new(
+                move |event: web_sys::MouseEvent| {
+                    if let Some(target) = event.target() {
+                        if let Ok(target_el) = target.dyn_into::<web_sys::Element>() {
+                            if target_el.id() == "about-overlay" {
+                                let _ = modal_ref.class_list().add_1("hidden");
+                            }
                         }
                     }
-                }
-            });
+                },
+            );
             about_modal.add_event_listener_with_callback("click", cb.as_ref().unchecked_ref())?;
             cb.forget();
         }
@@ -414,7 +448,8 @@ pub fn start_game() -> Result<(), JsValue> {
 
     *g.borrow_mut() = Some(Closure::<dyn FnMut()>::new(move || {
         let now = win_loop.performance().map(|p| p.now()).unwrap_or(0.0);
-        let dt = ((now - last_time) / 1000.0).clamp(0.001, 0.1);
+        let dt = ((now - last_time) / MILLISECONDS_PER_SECOND)
+            .clamp(MIN_FRAME_DELTA_SECONDS, MAX_FRAME_DELTA_SECONDS);
         last_time = now;
 
         {

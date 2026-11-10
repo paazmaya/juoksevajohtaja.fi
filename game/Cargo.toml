@@ -20,6 +20,7 @@ features = [
   "Document",
   "Element",
   "HtmlElement",
+  "HtmlImageElement",
   "HtmlCanvasElement",
   "DomRect",
   "CanvasRenderingContext2d",
