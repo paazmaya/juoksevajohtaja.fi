@@ -1,320 +1,384 @@
 # Juokseva Johtaja: Krea 2 Asset Prompts
 
-These prompts are for creating 2D assets for the side-scrolling running and
-interview game. Generate each character and background layer separately in
-Krea 2; do not ask for a complete scene or a sheet of layers in one image.
-
-## Art direction and workflow
-
-- Friendly Nordic daylight, clean 2D cartoon platformer art, bold dark outlines,
-  simple shapes, flat colors and at most one or two shadow tones.
-- Palette: morning cyan `#87CEEB`, warm sunrise `#FFD180`, charcoal track
-  `#374151`, host orange `#FF6B35`, runner blue `#2563EB`, birch green
-  `#48BB78` and autumn amber `#F6AD55`.
-- Use a consistent side-on, orthographic view, with characters facing right,
-  except for the front-facing pose of each person described below. Keep the
-  same proportions, colors, clothing and outline weight across assets.
-- Each code block below is a standalone prompt. Generate an idle image first
-  for each character, then use the approved image as a visual reference for the
-  other poses if your Krea workflow supports it. Review and correct anatomy,
-  silhouettes and unwanted details.
-- Generate animation frames individually rather than relying on Krea to produce
-  a correctly spaced sprite sheet. Use the same square canvas (`1:1` aspect ratio,
-  e.g. 1024 × 1024 px) and character scale for every frame of a character, leaving
-  ~15% breathing room around limbs and maintaining a consistent foot baseline.
-  Align and pack the frames in an image editor afterward.
-- Generate background layers on a wide landscape canvas (`16:9`, e.g. 1920 × 1080 px,
-  or `2:1`, 2048 × 1024 px) to facilitate seamless horizontal edge matching.
-- Request a plain white background for isolated sprites. Remove it afterward
-  and export PNGs with transparency; check the edges and restore any white
-  details inside the artwork. Generated transparency and perfect tiling may
-  require manual cleanup.
-
 ## Character sprites
 
-Each prompt describes an idle pose. For each approved character, repeat the
-prompt with the idle pose replaced by each of the following:
+### Style
 
-1. Four distinct running frames in cycle order: right foot forward, passing
-   position, left foot forward, opposite passing position. Arms swing naturally.
-2. One airborne jump, knees bent and feet clear of the ground.
-3. One friendly talking or listening pose suitable for an interview while
-   keeping the character facing right.
-4. One cheerful celebration pose (thumbs up or fist pump).
-5. One comical stumble or tripping pose (recoiling slightly, arms flailing)
-   for visual feedback when hitting an obstacle during the invulnerability timer.
+Friendly Nordic daylight, clean 2D cartoon platformer character art with
+compact, readable silhouettes, rounded shapes, clear facial features and
+confident, friendly expressions. Use a strict side-on orthographic view with
+the character facing right; avoid foreshortening, perspective and dramatic
+camera angles. Draw smooth, bold, dark charcoal outlines (#263238) of consistent
+weight, flat vivid colors, and no more than one or two simple shadow tones.
+Use warm natural skin tones, dark brown or black hair as described, and a
+coordinated Nordic sportswear palette: host orange (#FF6B35), runner blue
+(#2563EB), teal (#2C7A7B), navy (#1F2937), birch green (#48BB78), and light
+shoe accents (#E5E7EB). Keep each character's identity, proportions, colors,
+clothing, lighting and outline weight consistent across all poses. Center the
+full character with clear space around the silhouette and align the feet to a
+consistent baseline. Use a plain pure white background. No text, speech
+bubbles, extra characters, props outside the silhouette, ground or cast shadow.
 
-For every person, also generate one full-body, front-facing standing pose
-looking directly at the viewer. In that person's prompt, replace "idle standing
-pose, strict side profile facing right" with "standing pose, orthographic
-front view, face and body facing directly toward the viewer". Keep the same
-identity, outfit, scale, canvas, baseline and art style as the side-view sprite.
-
-Keep the character's identity and outfit unchanged. No text, speech bubbles,
-extra characters, props outside the silhouette, ground or cast shadow. Animals
-remain recognizably animals and use their natural locomotion, not human legs.
+Start with an idle image for each character and use the approved image as a
+visual reference for other poses when possible. Generate frames individually:
+four distinct running frames in cycle order (right foot forward, passing
+position, left foot forward, opposite passing position; arms swing naturally),
+one airborne jump with bent knees and feet off the ground, one friendly talking
+or listening pose facing right, one cheerful celebration pose (thumbs up or
+fist pump), and one comical stumble or tripping pose with arms flailing. For
+each person, also generate a full-body front-facing standing pose looking
+directly at the viewer. Keep the same identity, outfit, scale, framing and baseline in every pose.
+Animals remain recognizably animals and use their natural locomotion, not
+human legs.
 
 ### Host: Jukka Paasonen
 
-```text
-One full-body 2D side-scrolling game character sprite, idle standing pose, strict side profile facing right. Jukka Paasonen, an approachable male podcast host and runner with short neat hair and a clearly visible short, neatly trimmed beard. He wears running headphones, a bright orange athletic shirt, navy running shorts and blue running shoes. Friendly Nordic cartoon platformer art, clean bold dark outlines, simple shapes, flat vivid colors and minimal cel shading. Center the entire character on a plain pure white background, with space around the body and feet on a consistent baseline. No text, ground, cast shadow, other characters or scenery.
-```
+Full-body 2D side-scrolling game character sprite, idle standing pose, strict
+side profile facing right. Jukka Paasonen is an approachable male podcast host
+and runner with short neat hair, warm natural skin tone and a clearly visible
+short, neatly trimmed beard. He wears dark charcoal running headphones
+(#263238), a bright orange athletic shirt (#FF6B35), navy running shorts
+(#1F2937) and vivid blue running shoes (#2563EB) with light gray soles
+(#E5E7EB). Friendly Nordic daylight, rounded readable shapes, smooth bold
+charcoal outlines (#263238), flat vivid colors and minimal cel shading. Plain
+pure white background; no text, ground, cast shadow, other characters or
+scenery.
 
 ### Guest: Sanna Marin
 
-```text
-One full-body 2D side-scrolling game character sprite, idle standing pose, strict side profile facing right. A recognizable, respectful cartoon likeness of Sanna Marin with long dark brown hair tied in a ponytail, wearing a teal running jacket, black running leggings and light-colored running shoes. Friendly Nordic cartoon platformer art, clean bold dark outlines, simple shapes, flat vivid colors and minimal cel shading. Center the entire character on a plain pure white background, with space around the body and feet on a consistent baseline. No text, ground, cast shadow, other characters or scenery.
-```
+Full-body 2D side-scrolling game character sprite, idle standing pose, strict
+side profile facing right. A recognizable, respectful cartoon likeness of Sanna
+Marin with warm natural skin tone and long dark brown hair tied in a ponytail.
+She wears a teal running jacket (#2C7A7B), black running leggings (#1F2937) and
+light gray running shoes (#E5E7EB). Friendly Nordic daylight, rounded readable
+shapes, smooth bold charcoal outlines (#263238), flat vivid colors and minimal
+cel shading. Plain pure white background; no text, ground, cast shadow, other
+characters or scenery.
 
 ### Guest: Tom Cruise as a Top Gun-inspired pilot
 
-```text
-One full-body 2D side-scrolling game character sprite, idle standing pose, strict side profile facing right. A recognizable cartoon likeness of Tom Cruise as a confident fighter pilot inspired by Top Gun, with short dark hair, aviator sunglasses and a friendly smile. He wears an olive-green flight suit with simple unmarked patches and running shoes. Friendly Nordic cartoon platformer art, clean bold dark outlines, simple shapes, flat vivid colors and minimal cel shading. Center the entire character on a plain pure white background, with space around the body and feet on a consistent baseline. No text, logos, aircraft, ground, cast shadow, other characters or scenery.
-```
+Full-body 2D side-scrolling game character sprite, idle standing pose, strict
+side profile facing right. A recognizable cartoon likeness of Tom Cruise as a
+confident fighter pilot inspired by Top Gun, with warm natural skin tone, short
+dark brown hair, black aviator sunglasses and a friendly smile. He wears an
+olive-green flight suit (#556B2F) with simple unmarked patches and dark running
+shoes (#263238) with light gray soles (#E5E7EB). Friendly Nordic daylight,
+rounded readable shapes, smooth bold charcoal outlines (#263238), flat colors
+and minimal cel shading. Plain pure white background; no text, logos, aircraft,
+ground, cast shadow, other characters or scenery.
 
 ### Guest: Alexander Stubb
 
-```text
-One full-body 2D side-scrolling game character sprite, idle standing pose, strict side profile facing right. A recognizable, respectful cartoon likeness of Alexander Stubb, an athletic Finnish man with short light brown hair and a friendly smile, wearing a royal blue running shirt, dark running shorts and running shoes. Friendly Nordic cartoon platformer art, clean bold dark outlines, simple shapes, flat vivid colors and minimal cel shading. Center the entire character on a plain pure white background, with space around the body and feet on a consistent baseline. No text, ground, cast shadow, other characters or scenery.
-```
+Full-body 2D side-scrolling game character sprite, idle standing pose, strict
+side profile facing right. A recognizable, respectful cartoon likeness of
+Alexander Stubb, an athletic Finnish man with warm natural skin tone, short
+light brown hair and a friendly smile. He wears a royal blue running shirt
+(#2563EB), dark navy running shorts (#1F2937) and dark running shoes (#263238)
+with light gray soles (#E5E7EB). Friendly Nordic daylight, rounded readable
+shapes, smooth bold charcoal outlines (#263238), flat vivid colors and minimal
+cel shading. Plain pure white background; no text, ground, cast shadow, other
+characters or scenery.
 
 ### Guest: Gorilla
 
-```text
-One full-body 2D side-scrolling game character sprite, idle standing pose on all fours, strict side profile facing right. A friendly, expressive adult gorilla with dark charcoal fur, a broad chest and long arms, recognizably a gorilla rather than a person in a costume. Friendly Nordic cartoon platformer art, clean bold dark outlines, simple shapes, flat colors and minimal cel shading. Center the entire animal on a plain pure white background, with space around the body and feet on a consistent baseline. No clothing, text, ground, cast shadow, other characters or scenery.
-```
-
-For the running frames, use a natural quadrupedal knuckle-running gait. For the
-interview pose, show the gorilla listening or gesturing while remaining
-recognizably animal-like.
+Full-body 2D side-scrolling game character sprite, idle standing pose on all
+fours, strict side profile facing right. A friendly, expressive adult gorilla
+with dark charcoal-black fur (#263238), a broad chest and long arms, a slightly
+lighter charcoal face (#4B5563), recognizably a gorilla rather than a person in
+a costume. Use rounded readable shapes, smooth bold charcoal outlines (#1F2937),
+flat colors and minimal cel shading. No clothing. Use a natural quadrupedal
+knuckle-running gait for running frames; for the interview pose, show the
+gorilla listening or gesturing while remaining recognizably animal-like. Plain
+pure white background; no text, ground, cast shadow, other characters or
+scenery.
 
 ### Guest: Grizzly bear
 
-```text
-One full-body 2D side-scrolling game character sprite, idle standing pose on all fours, strict side profile facing right. A friendly, expressive grizzly bear with warm brown fur, a prominent shoulder hump, rounded ears and a broad muzzle, recognizably a bear rather than a person in a costume. Friendly Nordic cartoon platformer art, clean bold dark outlines, simple shapes, flat colors and minimal cel shading. Center the entire animal on a plain pure white background, with space around the body and feet on a consistent baseline. No clothing, text, ground, cast shadow, other characters or scenery.
-```
-
-For the running frames, use a natural four-legged bear gait. For the interview
-pose, show the bear listening or gesturing while remaining recognizably
-animal-like.
+Full-body 2D side-scrolling game character sprite, idle standing pose on all
+fours, strict side profile facing right. A friendly, expressive grizzly bear
+with warm medium-brown fur (#8B5E34), a darker brown prominent shoulder hump
+(#6B4423), rounded ears and a broad muzzle, recognizably a bear rather than a
+person in a costume. Use rounded readable shapes, smooth bold dark-brown
+outlines (#3E2C1C), flat colors and minimal cel shading. No clothing. Use a
+natural four-legged bear gait for running frames; for the interview pose, show
+the bear listening or gesturing while remaining recognizably animal-like. Plain
+pure white background; no text, ground, cast shadow, other characters or
+scenery.
 
 ### Additional guest template
 
-```text
-One full-body 2D side-scrolling game character sprite, idle standing pose, strict side profile facing right. [Guest description and distinctive features], wearing [running outfit and shoes]. Friendly Nordic cartoon platformer art, clean bold dark outlines, simple shapes, flat vivid colors and minimal cel shading. Center the entire character on a plain pure white background, with space around the body and feet on a consistent baseline. No text, ground, cast shadow, other characters or scenery.
-```
+Full-body 2D side-scrolling game character sprite, idle standing pose, strict
+side profile facing right. [Guest description, distinctive features and skin,
+fur or hair colors], wearing [running outfit and shoe colors]. Friendly Nordic
+daylight, rounded readable shapes, smooth bold dark charcoal outlines
+(#263238), flat vivid colors and minimal cel shading. Keep the person's outfit,
+identity, proportions and colors consistent across all poses. Plain pure white
+background; no text, ground, cast shadow, other characters or scenery.
 
-## Running environments: parallax background layers
+## Running environments
 
-Generate each layer as a **separate wide image**, with the same canvas size
-(`16:9` at 1920 × 1080 px or `2:1` at 2048 × 1024 px), side-on orthographic
-viewpoint, matching lighting, and consistent low horizon line (placed at roughly
-75% down the canvas, corresponding to `GROUND_Y`).
+### Style
 
-Except for the opaque sky, request a plain pure white background above the
-objects for clean extraction into transparent PNGs. Check that left and right
-edges match seamlessly so the layer can repeat infinitely during running.
-
-Stack layers from back to front:
-1. **Sky**: static or 0.05× scroll
-2. **Far distance**: 0.15× scroll
-3. **Midground**: 0.45× scroll (where primary landmark features sit)
-4. **Near foreground**: 0.70× scroll (low vegetation, edge details)
-5. **Running track**: 1.00× scroll (ground surface)
-
----
+Friendly Nordic 2D cartoon platformer background art with clear silhouettes,
+crisp dark charcoal outlines (#263238) on illustrated objects, simple
+geometric forms, flat colors and no more than two subtle shadow tones. Use
+bright, readable daylight with a restrained palette: sky cyan (#87CEEB),
+sunrise gold (#FFD180), charcoal gray (#374151), birch green (#48BB78) and
+autumn amber (#F6AD55); individual scenes may specify additional colors, which
+must be followed exactly. Use a strict side-on orthographic viewpoint with no
+perspective or vanishing point, consistent lighting and a low horizon at
+roughly 75% of the image height (`GROUND_Y`). Compose separate, horizontally
+seamless repeating layers. The sky is opaque and fills its layer. For other
+layers, use a plain pure white background above the objects for clean removal.
+Keep distant elements low along the bottom third, midground objects based on
+the ground line, near-foreground details in a shallow strip along the bottom,
+and track surfaces only below the ground line. No characters or text unless
+specified.
 
 ### Environment 1: Helsinki City Center with Trams
 
-An urban morning run through downtown Helsinki, featuring classic Art Nouveau
-stone buildings, copper domes, and green-and-yellow trams.
+#### Sky: Morning city sky
 
-#### 1. Sky: Morning city sky
-```text
-One wide seamless horizontally repeating 2D game background tile: a calm Nordic morning sky over Helsinki, soft cyan (#87CEEB) transitioning to warm sunrise gold (#FFD180) near the horizon with sparse wispy clouds. Flat cartoon platformer art, clean restrained colors, strict side-on view, no perspective or vanishing point. Fill the entire canvas with sky; left and right edges join seamlessly. No buildings, trees, ground, characters, text or borders.
-```
+A wide repeating background tile of a calm Nordic morning sky over Helsinki,
+soft cyan (#87CEEB) transitioning to warm sunrise gold (#FFD180) near the
+horizon, with sparse wispy clouds in pale white (#F8FAFC). Use friendly flat
+2D cartoon platformer art and subtle color transitions. Fill the entire image
+with opaque sky. No buildings, trees, ground, characters, text or borders.
 
-#### 2. Far distance: Helsinki skyline and domes
-```text
-One wide seamless horizontally repeating 2D parallax layer for an urban Helsinki running game: distant muted city skyline silhouettes, neoclassical stone facades, the iconic green copper cathedral dome (Tuomiokirkko), and church spires, in soft hazy blue-gray tones (#7A8B99). Strict side-on orthographic view, low horizon line. Place distant buildings in a low horizontal band along the bottom third; leave the upper area plain pure white for removal. Matching left and right edges. No foreground, roads, vehicles, characters or text.
-```
+#### Far distance: Helsinki skyline and domes
 
-#### 3. Midground: City street, buildings, and green-and-yellow trams
-```text
-One wide seamless horizontally repeating 2D parallax layer for a Helsinki city center running game: handsome 4-story Nordic Art Nouveau stone apartment facades in pastel ochre, cream, and brick-red; street rails with a classic Helsinki tram in traditional dark bottle-green (#276749) with golden-yellow (#ECC94B) window trim; black cast-iron street lamps and granite building entrances. Strict side-on orthographic 2D view, no perspective. Bases of buildings and tram wheels aligned along the ground baseline; leave the sky area above plain pure white for removal. Left and right edges join seamlessly. No characters, speech bubbles, track or text.
-```
+A parallax layer of distant muted city skyline silhouettes and neoclassical
+stone facades in soft hazy blue-gray (#7A8B99), including the iconic green
+copper cathedral dome (Tuomiokirkko) in muted copper-green (#6B8E75) and church
+spires. Use simple flat shapes and soft atmospheric contrast. No foreground,
+roads, vehicles, characters or text.
 
-#### 4. Near foreground: Granite curbs and street planters
-```text
-One wide seamless horizontally repeating 2D parallax layer for an urban street running game: a low ground-level strip of dressed gray granite curbstones, modern metal street railings, and small wooden city planters with orange and yellow marigold flowers, seen side-on. Flat cartoon platformer art, bold clean dark outlines. Keep all objects low along the bottom edge so runners are not obscured; leave the area above plain pure white for removal. Matching left and right edges. No pavement, characters or text.
-```
+#### Midground: City street, buildings, and green-and-yellow trams
 
-#### 5. Track: Cobblestone city pavement
-```text
-One wide seamless horizontally repeating 2D side-scrolling game ground tile: a flat, level Helsinki street pavement paved with neat gray granite cobblestones, with a crisp straight curb edge and painted white bicycle/runner lane lines. Flat cartoon platformer art, clean dark outlines, strict side-on view, no perspective. Fill only the narrow bottom strip below the ground line; leave the area above plain pure white for removal. Matching left and right edges. No text or scenery.
-```
+A Helsinki city center with handsome 4-story Nordic Art Nouveau stone apartment
+facades in pastel ochre (#D6A75D), warm cream (#F3E7CF) and brick-red (#A44A3F);
+street rails with a classic Helsinki tram in dark bottle-green (#276749) with
+golden-yellow (#ECC94B) window trim; black cast-iron street lamps (#263238)
+and gray granite building entrances (#8A8F91). Use crisp charcoal outlines
+(#263238), flat colors and minimal shadows. Align building bases and tram
+wheels with the ground line. No characters, speech bubbles, track or text.
 
----
+#### Near foreground: Granite curbs and street planters
+
+A low ground-level strip of dressed gray granite curbstones (#8A8F91), modern
+dark gray metal street railings (#4B5563), and small warm-brown wooden city
+planters (#8B5E3C) with orange (#F97316) and yellow (#FACC15) marigold flowers
+and green leaves (#48BB78). Use bold dark charcoal outlines (#263238), flat
+colors and minimal shadows. Keep all objects low so runners are not obscured.
+No pavement, characters or text.
+
+#### Track: Cobblestone city pavement
+
+A flat, level Helsinki street pavement paved with neat medium-gray granite
+cobblestones (#9CA3A8), darker gray joints (#6B7280), a crisp straight curb
+edge, and painted white (#F8FAFC) bicycle/runner lane lines. Use clean flat 2D
+cartoon platformer art, dark charcoal outlines (#263238), and minimal texture.
+Fill only the narrow strip below the ground line. No text or scenery.
 
 ### Environment 2: Finnish Taiga Forest
 
-A trail run through Nordic coniferous and birch forest, with granite boulders,
-blueberry undergrowth, and a soft bark-chip path (pururata).
+#### Sky: Forest morning canopy sky
 
-#### 1. Sky: Forest morning canopy sky
-```text
-One wide seamless horizontally repeating 2D game background tile: a cool crisp Scandinavian forest morning sky, pale clear cyan-blue (#93C5FD) with soft morning mist near the horizon. Flat cartoon platformer art, minimal cel shading, strict side-on view, no perspective. Fill the entire canvas with sky; matching left and right edges. No trees, ground, characters, text or borders.
-```
+A cool, crisp Scandinavian forest morning sky in pale clear cyan-blue (#93C5FD)
+with soft near-horizon morning mist in very pale blue-gray (#DCEAF2). Use
+friendly flat 2D cartoon platformer art and a soft, restrained transition.
+Fill the entire image with opaque sky. No trees, ground, characters, text or
+borders.
 
-#### 2. Far distance: Deep pine ridges
-```text
-One wide seamless horizontally repeating 2D parallax layer for a Finnish forest running game: distant layers of rolling forested hills covered with dense dark-spruce and pine silhouettes in atmospheric muted blue-greens (#234E52, #285E61). Flat cartoon platformer art, simple shapes, strict side-on view, consistent low horizon. Place distant tree ridges along the bottom third; leave the area above plain pure white for removal. Left and right edges join seamlessly. No foreground trees, path, animals, characters or text.
-```
+#### Far distance: Deep pine ridges
 
-#### 3. Midground: Pines, silver birches, and granite boulders
-```text
-One wide seamless horizontally repeating 2D parallax layer for a Finnish nature trail running game: tall Scots pine trees with textured reddish-orange upper bark (#C05621), slender white silver birches with dark bark markings and lush green leaves (#48BB78), and rounded moss-covered gray granite boulders (#718096). Flat friendly cartoon platformer art, bold clean outlines, vibrant solid colors. Tree bases and rocks resting on a consistent low ground line; leave the space between and above trunks plain pure white for removal. Matching left and right edges. No path, characters, animals or text.
-```
+Distant rolling forested hills covered with dense dark-spruce and pine
+silhouettes in atmospheric muted blue-greens (#234E52, #285E61), with the
+farthest ridges lighter and hazier. Use simple flat shapes and subdued
+contrast. No foreground trees, path, animals, characters or text.
 
-#### 4. Near foreground: Moss, blueberry bushes, and ferns
-```text
-One wide seamless horizontally repeating 2D parallax layer for a Finnish forest running game: a low strip of lush green forest floor moss (#38A169), wild blueberry (mustikka) and lingonberry shrubs with small green leaves and tiny red and blue berries, a few small forest ferns, and scattered pine cones. Flat cartoon platformer art, clean dark outlines. Keep all undergrowth confined to a shallow strip along the bottom edge; leave the area above plain pure white for removal. Matching left and right edges. No trees, path, characters or text.
-```
+#### Midground: Pines, silver birches, and granite boulders
 
-#### 5. Track: Bark-chip trail (pururata)
-```text
-One wide seamless horizontally repeating 2D side-scrolling game ground tile: a level Finnish sawdust / bark-chip outdoor exercise track (pururata), rich warm cedar-brown woodchips (#854D0E, #9A3412) with a neat natural grass border along the top edge. Flat cartoon platformer art, clean dark outlines, strict side-on view, consistent ground height. Fill only the narrow bottom strip below the ground line; leave the area above plain pure white for removal. Matching left and right edges. No text or obstacles.
-```
+Tall Scots pine trees with reddish-orange bark (#C05621) and deep green needles
+(#276749), slender white silver birches with black bark markings (#263238) and
+lush green leaves (#48BB78), and rounded moss-covered gray granite boulders
+(#718096) with green moss (#38A169). Use vibrant flat colors and bold charcoal
+outlines (#263238). Align tree bases and rocks with the ground line. No path,
+characters, animals or text.
 
----
+#### Near foreground: Moss, blueberry bushes, and ferns
+
+A low strip of lush forest moss (#38A169), wild blueberry (mustikka) and
+lingonberry shrubs with small green leaves (#48BB78), tiny blue blueberries
+(#2563EB) and red lingonberries (#C53030), a few deeper green forest ferns
+(#276749), and warm brown pine cones (#8B5E34). Use crisp charcoal outlines
+(#263238) and flat colors. Keep all undergrowth in a shallow strip along the
+bottom. No trees, path, characters or text.
+
+#### Track: Bark-chip trail (pururata)
+
+A level Finnish sawdust / bark-chip outdoor exercise track (pururata), rich
+warm cedar-brown woodchips (#854D0E, #9A3412) with small tan highlights
+(#C08A52) and a neat natural green grass border (#48BB78) along the top edge.
+Use clean dark charcoal outlines (#263238) and restrained flat texture. Fill
+only the narrow strip below the ground line. No text or obstacles.
 
 ### Environment 3: Rural Fields with Small Country Church in Far Distance
 
-An open summer run across rolling Finnish agricultural plains, with ripening
-grain fields, rustic wooden fences, and a traditional parish church steeple
-on the distant horizon.
+#### Sky: Open agricultural summer sky
 
-#### 1. Sky: Open agricultural summer sky
-```text
-One wide seamless horizontally repeating 2D game background tile: a wide-open Nordic summer sky over rural fields, sunny pale blue with a few puffy white cumulus clouds drifting high up and warm golden sunlight (#FEF08A). Flat cartoon platformer art, clean bright colors, strict side-on view, no perspective. Fill the entire canvas with sky; matching left and right edges. No ground, buildings, trees, characters or text.
-```
+A wide-open Nordic summer sky over rural fields, sunny pale blue (#87CEEB) with
+a few puffy white cumulus clouds (#F8FAFC) drifting high up and warm golden
+sunlight (#FEF08A). Use friendly flat 2D cartoon platformer art. Fill the
+entire image with opaque sky. No ground, buildings, trees, characters or text.
 
-#### 2. Far distance: Country church steeple and distant farm horizon
-```text
-One wide seamless horizontally repeating 2D parallax layer for a Finnish countryside running game: a distant flat rural horizon with a classic Finnish whitewashed countryside stone parish church featuring a steep dark-shingled roof and separate wooden bell tower (tapuli) silhouette, framed by a faraway dark pine treeline and low distant barns. Soft muted pastel colors (#64748B, #475569). Strict side-on view, low horizon along the bottom quarter; leave the sky above plain pure white for removal. Matching left and right edges. No foreground, roads, crops, characters or text.
-```
+#### Far distance: Country church steeple and distant farm horizon
 
-#### 3. Midground: Golden grain fields and split-rail fence
-```text
-One wide seamless horizontally repeating 2D parallax layer for a Finnish farmland running game: waving fields of golden ripe oats and wheat (#EAB308, #FACC15), an authentic Finnish rustic wooden split-rail pole fence (riukuaita / seiväsaita) running along the field edge, and occasional neat cylindrical rolled hay bales wrapped in pale plastic. Flat friendly cartoon platformer art, bold clean dark outlines, bright warm colors. Base of fence and crops aligned along the ground line; leave the area above plain pure white for removal. Matching left and right edges. No church, roads, characters or text.
-```
+A distant flat rural horizon with a Finnish whitewashed stone parish church
+(warm white #F8FAFC), steep dark-shingled roof (#374151), and separate muted
+brown wooden bell tower (tapuli, #8B5E34). Frame it with a dark pine treeline
+(#234E52) and low distant barns in muted slate-blue (#64748B). Use soft pastel
+contrast and simple flat silhouettes. No foreground, roads, crops, characters
+or text.
 
-#### 4. Near foreground: Roadside wildflowers and tall grasses
-```text
-One wide seamless horizontally repeating 2D parallax layer for a rural Finnish road running game: a low roadside ditch strip with nodding bluebells (kissankello), white yarrow, yellow buttercups, and tall stalks of wild timothy grass. Flat cartoon platformer art, clean dark outlines, bright saturated colors. Keep all wild plants low along the bottom margin; leave the area above plain pure white for removal. Matching left and right edges. No pavement, fence, buildings, characters or text.
-```
+#### Midground: Golden grain fields and split-rail fence
 
-#### 5. Track: Rural gravel country road
-```text
-One wide seamless horizontally repeating 2D side-scrolling game ground tile: a firm, level Finnish country gravel road (hiekkatie) in warm sandy-gray (#D1D5DB, #A8A29E) with fine pebble textures and a soft grassy verge. Flat cartoon platformer art, clean dark outlines, strict side-on view, no perspective. Fill only the narrow bottom strip below the ground line; leave the area above plain pure white for removal. Matching left and right edges. No markings, text or obstacles.
-```
+Waving fields of golden ripe oats and wheat (#EAB308, #FACC15), with green
+stems (#65A30D); an authentic Finnish rustic split-rail pole fence
+(riukuaita / seiväsaita) in weathered brown wood (#8B5E34); and occasional
+cylindrical rolled hay bales wrapped in pale cream plastic (#F3E7CF). Use bright
+warm flat colors and bold charcoal outlines (#263238). Align the fence and crop
+bases with the ground line. No church, roads, characters or text.
 
----
+#### Near foreground: Roadside wildflowers and tall grasses
+
+A low roadside ditch strip with nodding bluebells (kissankello, #6366F1), white
+yarrow (#F8FAFC) with yellow centers (#FACC15), yellow buttercups (#FACC15),
+and tall green stalks of wild timothy grass (#65A30D). Use bright saturated flat
+colors and crisp charcoal outlines (#263238). Keep all wild plants low along
+the bottom margin. No pavement, fence, buildings, characters or text.
+
+#### Track: Rural gravel country road
+
+A firm, level Finnish country gravel road (hiekkatie) in warm sandy-gray
+(#D1D5DB, #A8A29E), with small darker gray pebbles (#6B7280) and a soft green
+grassy verge (#48BB78). Use subtle flat texture and charcoal outlines
+(#263238). Fill only the narrow strip below the ground line. No markings, text
+or obstacles.
 
 ### Environment 4: Abandoned House with Broken Tractor Next to It
 
-A rustic, slightly weathered Finnish countryside scene featuring a derelict
-wooden farmhouse (*autiotalo*) and an overgrown vintage tractor.
+#### Sky: Overcast Nordic autumn sky
 
-#### 1. Sky: Overcast Nordic autumn sky
-```text
-One wide seamless horizontally repeating 2D game background tile: an atmospheric, slightly overcast Nordic autumn sky, cool silver-gray (#CBD5E1) with pale breaking sunbeams and soft drifting slate clouds. Flat cartoon platformer art, restrained color palette, strict side-on view, no perspective. Fill the entire canvas with sky; matching left and right edges. No buildings, trees, ground, characters or text.
-```
+An atmospheric, slightly overcast Nordic autumn sky, cool silver-gray (#CBD5E1)
+with pale warm sunbeams (#FEF3C7) and soft drifting slate clouds (#64748B). Use
+restrained flat 2D cartoon colors. Fill the entire image with opaque sky. No
+buildings, trees, ground, characters or text.
 
-#### 2. Far distance: Autumn woodland ridge
-```text
-One wide seamless horizontally repeating 2D parallax layer for a rural autumn running game: a distant low ridge of mixed autumn woods with golden-yellow birches, orange aspens, and dark evergreen spruces in soft muted tones (#78716C, #854D0E). Strict side-on view, low horizon line along the bottom quarter; leave the sky above plain pure white for removal. Left and right edges join seamlessly. No houses, tractors, roads, characters or text.
-```
+#### Far distance: Autumn woodland ridge
 
-#### 3. Midground: Abandoned red farmhouse and broken vintage tractor
-```text
-One wide seamless horizontally repeating 2D parallax layer for a Finnish rural running game: a weathered 1.5-story traditional Finnish wooden farmhouse in faded peeling Falun red paint (punamulta, #991B1B) with a slightly sagging shingle roof, weathered gray wooden window frames, and wild vines climbing one wall. Parked beside the house in overgrown weeds is a broken vintage tractor (classic boxy Finnish Valmet style) with rusted orange patina (#EA580C), a missing exhaust pipe, faded yellow wheel rims, and a flat rear tire. A leaning wooden outbuilding sits nearby. Strict side-on orthographic 2D view, no perspective. House and tractor wheels resting on the ground line; leave the sky above plain pure white for removal. Left and right edges join seamlessly. No characters, speech bubbles, roads or text.
-```
+A distant low ridge of mixed autumn woods with golden-yellow birches (#F6AD55),
+orange aspens (#C05621), dark evergreen spruces (#276749), and muted brown-gray
+shadows (#78716C, #854D0E). Use simple flat silhouettes with atmospheric,
+subdued contrast. No houses, tractors, roads, characters or text.
 
-#### 4. Near foreground: Overgrown tall weeds and rusted barrel
-```text
-One wide seamless horizontally repeating 2D parallax layer for a rustic countryside running game: a low strip of overgrown wild tall weeds, stinging nettles, dry golden dandelion seed heads, weathered broken fence rails lying on the ground, and a small rusted iron barrel half-buried in the grass. Flat cartoon platformer art, bold clean dark outlines. Keep all items low along the bottom margin; leave the area above plain pure white for removal. Matching left and right edges. No vehicles, house, road, characters or text.
-```
+#### Midground: Abandoned red farmhouse and broken vintage tractor
 
-#### 5. Track: Overgrown dirt farm track
-```text
-One wide seamless horizontally repeating 2D side-scrolling game ground tile: a rural Finnish dirt cart lane with two parallel packed-earth wheel ruts in warm dark soil (#78350F) and a thin strip of hardy green grass growing down the middle. Flat cartoon platformer art, clean dark outlines, strict side-on view, consistent ground height. Fill only the narrow bottom strip below the ground line; leave the area above plain pure white for removal. Matching left and right edges. No text or scenery.
-```
+A weathered 1.5-story traditional Finnish wooden farmhouse in faded peeling
+Falun red paint (punamulta, #991B1B), with a charcoal-gray shingle roof
+(#374151), weathered gray wooden window frames (#78716C), and green wild vines
+(#48BB78) climbing one wall. Beside it in overgrown green weeds (#65A30D) is a
+broken vintage tractor (classic boxy Finnish Valmet style) with rusted orange
+patina (#EA580C), a missing exhaust pipe, faded yellow wheel rims (#EAB308),
+and a flat dark tire (#263238). Add a leaning weathered-brown wooden outbuilding
+(#8B5E34). Use clean charcoal outlines (#263238), flat colors and minimal
+shadows. Keep the house and tractor wheels on the ground line. No characters,
+speech bubbles, roads or text.
 
----
+#### Near foreground: Overgrown tall weeds and rusted barrel
 
-## Obstacles, pickups, and track props
+A low strip of overgrown green weeds (#65A30D), darker stinging nettles
+(#276749), dry golden dandelion seed heads (#F6AD55), weathered brown broken
+fence rails (#8B5E34) lying on the ground, and a small rust-orange rusted iron
+barrel (#9A3412) half-buried in the grass. Use simple flat shapes and bold
+charcoal outlines (#263238). Keep all items low along the bottom margin. No
+vehicles, house, road, characters or text.
 
-Generate these separately as full, isolated sprites using the same style and
-white-background cleanup workflow:
+#### Track: Overgrown dirt farm track
 
-### Pickups
+A rural Finnish dirt cart lane with two parallel packed-earth wheel ruts in
+warm dark soil (#78350F), lighter brown dirt highlights (#A16207), and a thin
+strip of hardy green grass (#48BB78) growing down the middle. Use clean dark
+charcoal outlines (#263238) and simple flat texture. Fill only the narrow strip
+below the ground line. No text or scenery.
 
-```text
-One isolated 2D side-scrolling game pickup sprite: a cheerful steaming takeaway coffee cup, side-on, centered on a plain pure white background. Friendly Nordic cartoon platformer art, bold dark outlines, simple flat colors, minimal cel shading. No text, scenery, ground or cast shadow.
-```
+## Pickups, obstacles, and track props
 
-```text
-One isolated 2D side-scrolling game pickup sprite: a small podcast microphone with simple sound-wave shapes, side-on, centered on a plain pure white background. Friendly Nordic cartoon platformer art, bold dark outlines, simple flat colors, minimal cel shading. No text, scenery, ground or cast shadow.
-```
+### Style
 
-### Obstacles
+One isolated 2D side-scrolling game sprite, side-on and centered, with a clear
+readable silhouette and rounded, slightly playful shapes. Friendly Nordic
+cartoon platformer art, bold smooth dark charcoal outlines (#263238), flat
+vivid colors and minimal cel shading. Use object colors exactly as specified
+and keep all small details legible. Plain pure white background. No text,
+scenery, ground or cast shadow unless specified in the object definition.
 
-```text
-One isolated 2D side-scrolling game obstacle sprite: a clean athletic running track hurdle with red-and-white striped crossbar and lightweight silver support legs, side-on, centered on a plain pure white background. Friendly Nordic cartoon platformer art, bold dark outlines, simple flat colors, minimal cel shading. No text, scenery, ground or cast shadow.
-```
+### Pickup: Coffee
 
-```text
-One isolated 2D side-scrolling game obstacle sprite: a comically oversized red calendar notification shaped like a hurdle, side-on, centered on a plain pure white background. Friendly Nordic cartoon platformer art, bold dark outlines, simple flat colors, minimal cel shading. No text, logos, scenery, ground or cast shadow.
-```
+A cheerful steaming takeaway coffee cup with a warm cream body (#F3E7CF), dark
+brown coffee visible at the rim (#5C3A21), an orange sleeve (#FF6B35), a dark
+charcoal lid (#263238) and pale white steam (#F8FAFC).
 
-```text
-One isolated 2D side-scrolling game obstacle sprite: a comical software bug obstacle shaped like a red Jira bug ticket or a stylized round bug with antennae, side-on, centered on a plain pure white background. Friendly Nordic cartoon platformer art, bold dark outlines, simple flat colors, minimal cel shading. No text, scenery, ground or cast shadow.
-```
+### Pickup: Podcast microphone
 
-```text
-One isolated 2D side-scrolling game obstacle sprite for a forest trail: a moss-covered fallen silver birch tree log hurdle with peeling white-and-black paper bark and small bracket fungi, side-on, centered on a plain pure white background. Friendly Nordic cartoon platformer art, bold dark outlines, simple flat colors, minimal cel shading. No ground, characters, text or cast shadow.
-```
+A small podcast microphone with a dark charcoal body (#374151), silver-gray
+mesh head (#9CA3AF), orange accent ring (#FF6B35) and simple blue sound-wave
+shapes (#2563EB).
 
-```text
-One isolated 2D side-scrolling game obstacle sprite for rural fields: a cylindrical agricultural rolled hay bale hurdle wrapped in pale plastic or tied with rustic twine, side-on, centered on a plain pure white background. Friendly Nordic cartoon platformer art, bold dark outlines, simple flat colors, minimal cel shading. No ground, characters, text or cast shadow.
-```
+### Obstacle: Running track hurdle
 
-```text
-One isolated 2D side-scrolling game obstacle sprite for an abandoned farmstead: a rusted vintage steel milk can and leaning weathered wooden crate hurdle, side-on, centered on a plain pure white background. Friendly Nordic cartoon platformer art, bold dark outlines, simple flat colors, minimal cel shading. No ground, characters, text or cast shadow.
-```
+A clean athletic running track hurdle with a red (#DC2626) and white (#F8FAFC)
+striped crossbar and lightweight silver-gray support legs (#9CA3AF).
 
-### Track props
+### Obstacle: Calendar notification
 
-```text
-One isolated 2D side-scrolling game checkpoint gate sprite: a welcoming Finnish wooden trail gate with a hanging orange banner, side-on, centered on a plain pure white background. Friendly Nordic cartoon platformer art, bold dark outlines, simple flat colors, minimal cel shading. Leave the center of the arch open; no ground, characters or cast shadow.
-```
+A comically oversized red calendar notification shaped like a hurdle, with a
+bright red body (#DC2626), white calendar page (#F8FAFC), dark charcoal binding
+and outline (#263238), and small orange alert accent (#FF6B35). No logos.
 
-```text
-One isolated 2D side-scrolling game finish line prop sprite: two checkered finish line posts with a bright ribbon banner, side-on, centered on a plain pure white background. Friendly Nordic cartoon platformer art, bold dark outlines, simple flat colors, minimal cel shading. No text, characters, ground or cast shadow.
-```
+### Obstacle: Software bug
 
-## Preparing assets for the game
+A comical software bug obstacle shaped like a red bug ticket (#DC2626) or a
+round red-orange bug (#EA580C) with dark charcoal antennae and outlines
+(#263238), small white eyes (#F8FAFC) and a playful expression. No readable
+text or logos.
 
-1. Remove the white backgrounds from sprites and non-sky layers in an image
-   editor, checking for halos and accidentally removed white details. Export
-   as transparent PNGs.
-2. Align each character's frames to a common canvas, baseline and scale; pack
-   them into a sprite sheet if the eventual animation implementation needs one.
-   Verify that the running cycle loops smoothly.
-3. Check each background tile by placing copies side by side, and composite all
-   layers together to check alignment, contrast and visibility.
-4. Store the finished files under `game/assets/backgrounds/`, `game/assets/obstacles/`,
-   and `game/assets/characters/`. The game renderer automatically detects and
-   renders these image layers and character sprites when present, while retaining
-   procedural drawing as a fallback when images are loading or absent.
+### Obstacle: Fallen birch
+
+A moss-covered fallen silver birch tree log hurdle with pale bark (#F8FAFC),
+irregular black bark markings (#263238), green moss (#48BB78) and small cream
+bracket fungi (#F3E7CF). No ground or characters.
+
+### Obstacle: Hay bale
+
+A cylindrical golden-brown agricultural rolled hay bale hurdle (#D6A75D) wrapped
+in pale cream plastic (#F3E7CF) or tied with rustic brown twine (#8B5E34). No
+ground or characters.
+
+### Obstacle: Milk can and crate
+
+A rusted vintage steel milk can in muted gray (#6B7280) with orange-brown rust
+(#9A3412), beside a leaning weathered wooden crate in medium brown (#8B5E34)
+with dark wood grain (#5C3A21). No ground or characters.
+
+### Track prop: Checkpoint gate
+
+A welcoming Finnish wooden trail gate in warm brown wood (#8B5E34) with a
+hanging bright orange banner (#FF6B35) and dark charcoal outlines (#263238).
+Leave the center of the arch open. No ground, characters or cast shadow.
+
+### Track prop: Finish line
+
+Two checkered finish line posts in alternating white (#F8FAFC) and charcoal
+(#263238), with a bright orange ribbon banner (#FF6B35) and small green accents
+(#48BB78). No text, characters, ground or cast shadow.
