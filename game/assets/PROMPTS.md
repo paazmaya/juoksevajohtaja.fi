@@ -13,21 +13,53 @@ weight, flat vivid colors, and no more than one or two simple shadow tones.
 Use warm natural skin tones, dark brown or black hair as described, and a
 coordinated Nordic sportswear palette: host orange (#FF6B35), runner blue
 (#2563EB), teal (#2C7A7B), navy (#1F2937), birch green (#48BB78), and light
-shoe accents (#E5E7EB). Keep each character's identity, proportions, colors,
-clothing, lighting and outline weight consistent across all poses. Center the
-full character with clear space around the silhouette and align the feet to a
-consistent baseline. Use a plain pure white background. No text, speech
-bubbles, extra characters, props outside the silhouette, ground or cast shadow.
+shoe accents (#E5E7EB). Treat every specified color and hex code as a locked
+flat fill. Copy the exact garment-to-color mapping from the character prompt
+and approved idle reference into every pose. Do not shift hues, substitute
+colors, add patterns, gradients, color accents, clothing, or accessories.
+Never change a garment's color between frames. Keep each character's identity,
+proportions, colors, clothing, lighting and outline weight consistent across
+all poses. Generate each pose as a separate image, always using the approved
+idle image as its visual reference; do not create a composite grid or redraw
+the character from text alone. Center the full character with clear space
+around the silhouette and align the feet to a consistent baseline. Use a plain
+pure white background. No text, speech bubbles, extra characters, props
+outside the silhouette, ground or cast shadow.
 
-Start with an idle image for each character and use the approved image as a
-visual reference for other poses when possible. Generate frames individually:
-four distinct running frames in cycle order (right foot forward, passing
-position, left foot forward, opposite passing position; arms swing naturally),
-one airborne jump with bent knees and feet off the ground, one friendly talking
-or listening pose facing right, one cheerful celebration pose (thumbs up or
-fist pump), and one comical stumble or tripping pose with arms flailing. For
-each person, also generate a full-body front-facing standing pose looking
-directly at the viewer. Keep the same identity, outfit, scale, framing and baseline in every pose.
+clearlines
+
+Start with an idle image for each character. Generate each running frame as a
+separate image using that idle image as a reference. Keep the character facing
+right in every frame; forward is always toward the right edge of the image.
+Show both legs distinctly, without hiding or merging either leg. Make a
+four-frame walk/run cycle with exactly two opposite leading-leg poses and two
+passing poses, in this order:
+
+Frame 1, LEFT-LEG LEADS: the character's anatomical left foot is clearly ahead
+of the hips, toward the right edge of the image; the right foot is behind the
+hips, toward the left edge. The left leg is the leading leg.
+
+Frame 2, PASSING TO RIGHT-LEG LEAD: the left leg pushes back while the right
+knee swings forward beneath the hips. Show the legs changing places.
+
+Frame 3, RIGHT-LEG LEADS: the character's anatomical right foot is clearly
+ahead of the hips, toward the right edge of the image; the left foot is behind
+the hips, toward the left edge. This is the opposite leg pose from frame 1.
+
+Frame 4, PASSING TO LEFT-LEG LEAD: the right leg pushes back while the left
+knee swings forward beneath the hips. Show the legs changing places and return
+to frame 1.
+
+Frames 1 and 3 must have opposite legs leading. Do not repeat frame 1 in frame
+3, keep the same leg leading throughout the sequence, or produce four similar
+poses. Alternate the arms naturally opposite the legs. For animals, use their
+natural species-appropriate gait instead of human legs. Also generate one
+airborne jump with bent knees and feet off the ground,
+one friendly talking or listening pose facing right, one cheerful celebration
+pose (thumbs up or fist pump), and one comical stumble or tripping pose with
+arms flailing. For each person, also generate a full-body front-facing standing
+pose looking directly at the viewer. Keep the same identity, outfit, scale,
+framing and baseline in every pose.
 Animals remain recognizably animals and use their natural locomotion, not
 human legs.
 
@@ -36,48 +68,55 @@ human legs.
 Full-body 2D side-scrolling game character sprite, idle standing pose, strict
 side profile facing right. Jukka Paasonen is an approachable male podcast host
 and runner with short neat hair, warm natural skin tone and a clearly visible
-short, neatly trimmed beard. He wears dark charcoal running headphones
-(#263238), a bright orange athletic shirt (#FF6B35), navy running shorts
-(#1F2937) and vivid blue running shoes (#2563EB) with light gray soles
-(#E5E7EB). Friendly Nordic daylight, rounded readable shapes, smooth bold
-charcoal outlines (#263238), flat vivid colors and minimal cel shading. Plain
-pure white background; no text, ground, cast shadow, other characters or
-scenery.
+short, neatly trimmed beard. His fixed outfit in every pose is dark charcoal
+headphones (#263238), a solid bright orange athletic shirt (#FF6B35), solid
+navy running shorts (#1F2937), and vivid blue running shoes (#2563EB) with
+light gray soles (#E5E7EB). Preserve these exact colors on these exact items
+in every frame; no recoloring, extra garment colors, patterns, or accessories.
+Friendly Nordic daylight, rounded readable shapes, smooth bold charcoal
+outlines (#263238), flat vivid colors and minimal cel shading. Plain pure white
+background; no text, ground, cast shadow, other characters or scenery.
 
 ### Guest: Sanna Marin
 
 Full-body 2D side-scrolling game character sprite, idle standing pose, strict
 side profile facing right. A recognizable, respectful cartoon likeness of Sanna
 Marin with warm natural skin tone and long dark brown hair tied in a ponytail.
-She wears a teal running jacket (#2C7A7B), black running leggings (#1F2937) and
-light gray running shoes (#E5E7EB). Friendly Nordic daylight, rounded readable
-shapes, smooth bold charcoal outlines (#263238), flat vivid colors and minimal
-cel shading. Plain pure white background; no text, ground, cast shadow, other
-characters or scenery.
+Her fixed outfit in every pose is a solid teal running jacket (#2C7A7B), solid
+black leggings (#1F2937), and light gray running shoes (#E5E7EB). Preserve
+these exact colors on these exact items in every frame; no recoloring, extra
+garment colors, patterns, or accessories. Friendly Nordic daylight, rounded
+readable shapes, smooth bold charcoal outlines (#263238), flat vivid colors
+and minimal cel shading. Plain pure white background; no text, ground, cast
+shadow, other characters or scenery.
 
 ### Guest: Tom Cruise as a Top Gun-inspired pilot
 
 Full-body 2D side-scrolling game character sprite, idle standing pose, strict
 side profile facing right. A recognizable cartoon likeness of Tom Cruise as a
 confident fighter pilot inspired by Top Gun, with warm natural skin tone, short
-dark brown hair, black aviator sunglasses and a friendly smile. He wears an
-olive-green flight suit (#556B2F) with simple unmarked patches and dark running
-shoes (#263238) with light gray soles (#E5E7EB). Friendly Nordic daylight,
-rounded readable shapes, smooth bold charcoal outlines (#263238), flat colors
-and minimal cel shading. Plain pure white background; no text, logos, aircraft,
-ground, cast shadow, other characters or scenery.
+dark brown hair, black aviator sunglasses and a friendly smile. His fixed
+outfit in every pose is a solid olive-green flight suit (#556B2F) with the same
+simple unmarked patches, and dark running shoes (#263238) with light gray soles
+(#E5E7EB). Preserve these exact colors on these exact items in every frame; no
+recoloring, extra garment colors, patterns, or accessories. Friendly Nordic
+daylight, rounded readable shapes, smooth bold charcoal outlines (#263238),
+flat colors and minimal cel shading. Plain pure white background; no text,
+logos, aircraft, ground, cast shadow, other characters or scenery.
 
 ### Guest: Alexander Stubb
 
 Full-body 2D side-scrolling game character sprite, idle standing pose, strict
 side profile facing right. A recognizable, respectful cartoon likeness of
 Alexander Stubb, an athletic Finnish man with warm natural skin tone, short
-light brown hair and a friendly smile. He wears a royal blue running shirt
-(#2563EB), dark navy running shorts (#1F2937) and dark running shoes (#263238)
-with light gray soles (#E5E7EB). Friendly Nordic daylight, rounded readable
-shapes, smooth bold charcoal outlines (#263238), flat vivid colors and minimal
-cel shading. Plain pure white background; no text, ground, cast shadow, other
-characters or scenery.
+light brown hair and a friendly smile. His fixed outfit in every pose is a
+solid royal blue running shirt (#2563EB), solid dark navy running shorts
+(#1F2937), and dark running shoes (#263238) with light gray soles (#E5E7EB).
+Preserve these exact colors on these exact items in every frame; no recoloring,
+extra garment colors, patterns, or accessories. Friendly Nordic daylight,
+rounded readable shapes, smooth bold charcoal outlines (#263238), flat vivid
+colors and minimal cel shading. Plain pure white background; no text, ground,
+cast shadow, other characters or scenery.
 
 ### Guest: Gorilla
 
@@ -86,11 +125,15 @@ fours, strict side profile facing right. A friendly, expressive adult gorilla
 with dark charcoal-black fur (#263238), a broad chest and long arms, a slightly
 lighter charcoal face (#4B5563), recognizably a gorilla rather than a person in
 a costume. Use rounded readable shapes, smooth bold charcoal outlines (#1F2937),
-flat colors and minimal cel shading. No clothing. Use a natural quadrupedal
-knuckle-running gait for running frames; for the interview pose, show the
-gorilla listening or gesturing while remaining recognizably animal-like. Plain
-pure white background; no text, ground, cast shadow, other characters or
-scenery.
+flat colors and minimal cel shading. The gorilla is completely unclothed in
+every frame: no shirt, jacket, vest, trousers, shorts, shoes, hat, jewelry, or
+other accessories. Do not apply the human sportswear instructions to this
+animal. Keep the fur and face colors identical across all poses. Use a natural
+quadrupedal knuckle-running gait for running frames, alternating the forelimbs
+and hind limbs in a believable opposite-side stride; do not use a human
+bipedal running pose. For the interview pose, show the gorilla listening or
+gesturing while remaining recognizably animal-like and unclothed. Plain pure
+white background; no text, ground, cast shadow, other characters or scenery.
 
 ### Guest: Grizzly bear
 
@@ -109,11 +152,14 @@ scenery.
 
 Full-body 2D side-scrolling game character sprite, idle standing pose, strict
 side profile facing right. [Guest description, distinctive features and skin,
-fur or hair colors], wearing [running outfit and shoe colors]. Friendly Nordic
-daylight, rounded readable shapes, smooth bold dark charcoal outlines
-(#263238), flat vivid colors and minimal cel shading. Keep the person's outfit,
-identity, proportions and colors consistent across all poses. Plain pure white
-background; no text, ground, cast shadow, other characters or scenery.
+fur or hair colors], wearing [running outfit and shoe colors]. Treat every
+listed garment color as a fixed, solid hex color and preserve the exact
+garment-to-color mapping in every pose. No recoloring, added colors, patterns,
+or accessories. Friendly Nordic daylight, rounded readable shapes, smooth
+bold dark charcoal outlines (#263238), flat vivid colors and minimal cel
+shading. Keep the person's outfit, identity, proportions and colors consistent
+across all poses. Plain pure white background; no text, ground, cast shadow,
+other characters or scenery.
 
 ## Running environments
 
