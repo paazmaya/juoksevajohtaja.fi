@@ -148,6 +148,23 @@ the bear listening or gesturing while remaining recognizably animal-like. Plain
 pure white background; no text, ground, cast shadow, other characters or
 scenery.
 
+### Guest: Lecturer
+
+Full-body 2D side-scrolling game character sprite, idle standing pose, strict
+side profile facing right. A friendly, recognizable cartoon lecturer: a thin
+man with warm natural skin tone, round glasses and curly hair that is mostly
+light ash-brown with a few gray strands (not blonde). His fixed outfit in
+every pose is a solid pale-blue plaid button-down shirt (#93C5FD) with small
+simple squares, a white chest pocket (#F8FAFC) holding a few colorful
+whiteboard markers (#EF4444, #FACC15, #2563EB), and dark gray slacks
+(#374151) with dark brown shoes (#78350F) and light gray soles (#E5E7EB).
+Preserve these exact colors on these exact items in every frame; no
+recoloring, extra garment colors, patterns beyond the shirt squares, or
+accessories. He looks like a typical university teacher. Friendly Nordic
+daylight, rounded readable shapes, smooth bold charcoal outlines (#263238),
+flat vivid colors and minimal cel shading. Plain pure white background; no
+text, ground, cast shadow, other characters or scenery.
+
 ### Additional guest template
 
 Full-body 2D side-scrolling game character sprite, idle standing pose, strict
