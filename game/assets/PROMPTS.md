@@ -1,60 +1,108 @@
 # Juokseva Johtaja: Krea 2 Asset Prompts
 
+Use "koukouya" Lora with 0.85 strength, because it seems to help with keeping characters consistent
+https://civitai.com/models/2856290/kokoya-koukouya-style-krea2-lora
+
 ## Character sprites
 
 ### Style
+
+hand-drawn cartoon style,
+kokoya_style
 
 Friendly Nordic daylight, clean 2D cartoon platformer character art with
 compact, readable silhouettes, rounded shapes, clear facial features and
 confident, friendly expressions. Use a strict side-on orthographic view with
 the character facing right; avoid foreshortening, perspective and dramatic
 camera angles. Draw smooth, bold, dark charcoal outlines (#263238) of consistent
-weight, flat vivid colors, and no more than one or two simple shadow tones.
+weight, flat vivid colors, and no more than one or two simple shadow tones
+outside the clothing.
 Use warm natural skin tones, dark brown or black hair as described, and a
 coordinated Nordic sportswear palette: host orange (#FF6B35), runner blue
 (#2563EB), teal (#2C7A7B), navy (#1F2937), birch green (#48BB78), and light
-shoe accents (#E5E7EB). Treat every specified color and hex code as a locked
-flat fill. Copy the exact garment-to-color mapping from the character prompt
-and approved idle reference into every pose. Do not shift hues, substitute
-colors, add patterns, gradients, color accents, clothing, or accessories.
-Never change a garment's color between frames. Keep each character's identity,
-proportions, colors, clothing, lighting and outline weight consistent across
-all poses. Generate each pose as a separate image, always using the approved
-idle image as its visual reference; do not create a composite grid or redraw
-the character from text alone. Center the full character with clear space
-around the silhouette and align the feet to a consistent baseline. Use a plain
-pure white background. No text, speech bubbles, extra characters, props
-outside the silhouette, ground or cast shadow.
+shoe accents (#E5E7EB). The selected character's outfit is a locked design,
+not a selection from this palette. Follow the selected character description's
+exact garment-to-color mapping in every image. Preserve each
+garment's type, shape, length, fit, color, and specified details, and preserve
+both shoes and all specified accessories. Use the specified hex color as the
+flat fill for each clothing item, without highlights, shadows, gradients,
+recoloring, or new accents. Do not add, remove, exchange, or redesign garments,
+details, patterns, or accessories; retain only those specified for that
+character. Keep the same identity, proportions, lighting and outline weight
+across all poses. Generate each pose as a separate image from the selected
+character's written description. Center the full character with clear space
+around the silhouette and align the feet to a consistent baseline. Fill the
+entire background, including gaps between limbs, with opaque pure white
+(#FFFFFF, RGB 255, 255, 255). No transparency, checkerboard, gradient, texture,
+tint, horizon, ground, cast shadow, text, speech bubbles, extra characters or
+props outside the silhouette.
 
-clearlines
 
-Start with an idle image for each character. Generate each running frame as a
-separate image using that idle image as a reference. Keep the character facing
-right in every frame; forward is always toward the right edge of the image.
-Show both legs distinctly, without hiding or merging either leg. Make a
-four-frame walk/run cycle with exactly two opposite leading-leg poses and two
-passing poses, in this order:
+For each human walk or run frame, use the selected character's written
+description and its exact outfit colors. Produce one image per frame; apply
+only the requested frame pose, not the idle pose or the other frame poses.
+Keep the body facing right and show
+the character's left side nearest the viewer throughout the cycle: the left
+leg is the near leg and the right leg is the far leg. The near leg remains on
+the viewer's side even when it trails; the far leg remains on the far side
+even when it leads. Forward means toward the right edge of the image, not
+closer to the viewer. Keep both legs and shoes visibly separate, including in
+passing poses. Keep the same outfit and its exact colors in all four frames.
+Leave enough space around each frame to cut a rectangle without cutting the
+character. Keep the entire background opaque pure white (#FFFFFF).
 
-Frame 1, LEFT-LEG LEADS: the character's anatomical left foot is clearly ahead
-of the hips, toward the right edge of the image; the right foot is behind the
-hips, toward the left edge. The left leg is the leading leg.
+### Human walk or run frame 1: Left leg leading
 
-Frame 2, PASSING TO RIGHT-LEG LEAD: the left leg pushes back while the right
-knee swings forward beneath the hips. Show the legs changing places.
+Using the selected character's written description and exact outfit colors,
+generate one full-body side-view frame facing right. The anatomical LEFT leg
+is nearest the viewer and leads: its knee and shoe reach to the RIGHT of the
+hips, toward the direction of travel. The anatomical RIGHT leg is farther from
+the viewer and trails: its shoe reaches to the LEFT of the hips. The left
+shoe is farther right than the right shoe. Swing the right arm forward and the
+left arm back. Preserve the described outfit exactly, with the same garment
+shapes, colors, details and shoes. Fill the background with opaque pure white
+(#FFFFFF), including gaps between limbs. No right-leg-leading pose, no mirrored
+character, no outfit changes, no extra colors or cast shadow.
 
-Frame 3, RIGHT-LEG LEADS: the character's anatomical right foot is clearly
-ahead of the hips, toward the right edge of the image; the left foot is behind
-the hips, toward the left edge. This is the opposite leg pose from frame 1.
+### Human walk or run frame 2: Passing to right leg leading
 
-Frame 4, PASSING TO LEFT-LEG LEAD: the right leg pushes back while the left
-knee swings forward beneath the hips. Show the legs changing places and return
-to frame 1.
+Using the selected character's written description and exact outfit colors,
+generate one full-body side-view frame facing right. The near LEFT leg moves
+back beneath the hips while the far RIGHT knee swings forward. Keep both
+shoes visible and distinct. Swing the left arm forward and the right arm back.
+Preserve the described outfit exactly, with the same garment shapes, colors,
+details and shoes. Fill the background with opaque pure white (#FFFFFF),
+including gaps between limbs. No mirrored character, no outfit changes, no
+extra colors or cast shadow.
 
-Frames 1 and 3 must have opposite legs leading. Do not repeat frame 1 in frame
-3, keep the same leg leading throughout the sequence, or produce four similar
-poses. Alternate the arms naturally opposite the legs. For animals, use their
-natural species-appropriate gait instead of human legs. Also generate one
-airborne jump with bent knees and feet off the ground,
+### Human walk or run frame 3: Right leg leading
+
+Using the selected character's written description and exact outfit colors,
+generate one full-body side-view frame facing right. The anatomical RIGHT leg
+is farther from the viewer and leads: its knee and shoe reach to the RIGHT of
+the hips, toward the direction of travel. The anatomical LEFT leg is nearest
+the viewer and trails: its shoe reaches to the LEFT of the hips. The right
+shoe is farther right than the left shoe. Swing the left arm forward and the
+right arm back. Preserve the described outfit exactly, with the same garment
+shapes, colors, details and shoes. Fill the background with opaque pure white
+(#FFFFFF), including gaps between limbs. No left-leg-leading pose, no mirrored
+character, no outfit changes, no extra colors or cast shadow.
+
+### Human walk or run frame 4: Passing to left leg leading
+
+Using the selected character's written description and exact outfit colors,
+generate one full-body side-view frame facing right. The far RIGHT leg moves
+back beneath the hips while the near LEFT knee swings forward. Keep both
+shoes visible and distinct. Swing the right arm forward and the left arm back.
+Preserve the described outfit exactly, with the same garment shapes, colors,
+details and shoes. Fill the background with opaque pure white (#FFFFFF),
+including gaps between limbs. No mirrored character, no outfit changes, no
+extra colors or cast shadow.
+
+### Other character poses
+
+For animals, use their natural species-appropriate gait instead of human legs.
+Also generate one airborne jump with bent knees and feet off the ground,
 one friendly talking or listening pose facing right, one cheerful celebration
 pose (thumbs up or fist pump), and one comical stumble or tripping pose with
 arms flailing. For each person, also generate a full-body front-facing standing
@@ -383,8 +431,10 @@ One isolated 2D side-scrolling game sprite, side-on and centered, with a clear
 readable silhouette and rounded, slightly playful shapes. Friendly Nordic
 cartoon platformer art, bold smooth dark charcoal outlines (#263238), flat
 vivid colors and minimal cel shading. Use object colors exactly as specified
-and keep all small details legible. Plain pure white background. No text,
-scenery, ground or cast shadow unless specified in the object definition.
+and keep all small details legible. Fill the entire background, including
+openings within and between objects, with opaque pure white (#FFFFFF, RGB 255,
+255, 255). No transparency, checkerboard, gradient, texture, tint, text,
+scenery, ground or cast shadow.
 
 ### Pickup: Coffee
 
