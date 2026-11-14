@@ -1,13 +1,12 @@
 //! 2D HTML5 Canvas rendering for running tracks, parallax backgrounds, runners, and HUD.
 
-#[cfg(target_arch = "wasm32")]
+use crate::canvas::Canvas;
 use crate::game::{Game, GameState};
 #[cfg(target_arch = "wasm32")]
 use crate::level::Level;
-#[cfg(target_arch = "wasm32")]
 use crate::physics::{GROUND_Y, RUNNER_HEIGHT, RUNNER_WIDTH};
 #[cfg(target_arch = "wasm32")]
-use web_sys::{CanvasRenderingContext2d, HtmlImageElement};
+use web_sys::HtmlImageElement;
 
 /// Parallax scroll factor for the sky layer.
 pub const PARALLAX_SKY_SPEED: f64 = 0.05;
@@ -116,42 +115,41 @@ pub const QUIZ_FEEDBACK_BOX_HEIGHT: f64 = 48.0;
 /// Pointer click margin tolerance around choice speech boxes in pixels.
 pub const QUIZ_CLICK_TOLERANCE: f64 = 10.0;
 
-/// Loaded HTML5 Image elements for 3-layer parallax backgrounds, obstacles, and character animations.
-#[cfg(target_arch = "wasm32")]
-#[derive(Default)]
-pub struct ImageAssets {
+/// Loaded images for 3-layer parallax backgrounds, obstacles, and character animations.
+/// `I` is the canvas image type (`HtmlImageElement` in the browser).
+pub struct ImageAssets<I> {
     /// Background Layer 1: Sky, clouds, sun.
-    pub bg_layer1: Option<HtmlImageElement>,
+    pub bg_layer1: Option<I>,
     /// Background Layer 2: Distant midground hills, skyline.
-    pub bg_layer2: Option<HtmlImageElement>,
+    pub bg_layer2: Option<I>,
     /// Background Layer 3: Near foreground scenery, roadside trees.
-    pub bg_layer3: Option<HtmlImageElement>,
+    pub bg_layer3: Option<I>,
     /// Obstacle: Runner hurdle.
-    pub obstacle_hurdle: Option<HtmlImageElement>,
+    pub obstacle_hurdle: Option<I>,
     /// Obstacle: Urgent meeting alert box.
-    pub obstacle_meeting: Option<HtmlImageElement>,
+    pub obstacle_meeting: Option<I>,
     /// Obstacle: Cactus / bug platform.
-    pub obstacle_cactus: Option<HtmlImageElement>,
+    pub obstacle_cactus: Option<I>,
     /// Player: Idle pose.
-    pub player_idle: Option<HtmlImageElement>,
+    pub player_idle: Option<I>,
     /// Player: Walk cycle frame 1.
-    pub player_walk1: Option<HtmlImageElement>,
+    pub player_walk1: Option<I>,
     /// Player: Walk cycle frame 2.
-    pub player_walk2: Option<HtmlImageElement>,
+    pub player_walk2: Option<I>,
     /// Player: Jump pose.
-    pub player_jump: Option<HtmlImageElement>,
+    pub player_jump: Option<I>,
     /// Player: Victory cheer pose.
-    pub player_victory: Option<HtmlImageElement>,
+    pub player_victory: Option<I>,
     /// Host: Idle pose.
-    pub host_idle: Option<HtmlImageElement>,
+    pub host_idle: Option<I>,
     /// Host: Walk cycle frame 1.
-    pub host_walk1: Option<HtmlImageElement>,
+    pub host_walk1: Option<I>,
     /// Host: Walk cycle frame 2.
-    pub host_walk2: Option<HtmlImageElement>,
+    pub host_walk2: Option<I>,
     /// Host: Jump pose.
-    pub host_jump: Option<HtmlImageElement>,
+    pub host_jump: Option<I>,
     /// Host: Victory cheer pose.
-    pub host_victory: Option<HtmlImageElement>,
+    pub host_victory: Option<I>,
 }
 
 #[cfg(target_arch = "wasm32")]
@@ -161,24 +159,20 @@ fn load_image(src: &str) -> Option<HtmlImageElement> {
     Some(img)
 }
 
-#[cfg(target_arch = "wasm32")]
-fn is_image_ready(img: &Option<HtmlImageElement>) -> Option<&HtmlImageElement> {
-    match img {
-        Some(element) if element.complete() && element.natural_width() > 0 => Some(element),
-        _ => None,
-    }
+fn is_image_ready<'a, C: Canvas>(ctx: &C, img: &'a Option<C::Image>) -> Option<&'a C::Image> {
+    img.as_ref().filter(|image| ctx.image_size(image).is_some())
 }
 
-#[cfg(target_arch = "wasm32")]
-fn draw_tiled_layer(
-    ctx: &CanvasRenderingContext2d,
-    img: &HtmlImageElement,
+fn draw_tiled_layer<C: Canvas>(
+    ctx: &C,
+    img: &C::Image,
     screen_w: f64,
     screen_h: f64,
     offset_x: f64,
 ) {
-    let img_w = img.natural_width() as f64;
-    let img_h = img.natural_height() as f64;
+    let Some((img_w, img_h)) = ctx.image_size(img) else {
+        return;
+    };
     if img_w <= 0.0 || img_h <= 0.0 {
         return;
     }
@@ -194,7 +188,7 @@ fn draw_tiled_layer(
 }
 
 #[cfg(target_arch = "wasm32")]
-impl ImageAssets {
+impl ImageAssets<HtmlImageElement> {
     /// Asynchronously requests image elements from level configuration and standard asset folders.
     pub fn load(level: Option<&Level>) -> Self {
         let (l1, l2, l3) = if let Some(bg) = level.and_then(|l| l.background.as_ref()) {
@@ -229,17 +223,15 @@ impl ImageAssets {
 }
 
 /// Canvas 2D renderer for all game visuals.
-#[cfg(target_arch = "wasm32")]
-pub struct Renderer {
+pub struct Renderer<I> {
     /// Canvas viewport width in pixels.
     pub width: f64,
     /// Canvas viewport height in pixels.
     pub height: f64,
     /// Loaded image assets.
-    pub assets: ImageAssets,
+    pub assets: ImageAssets<I>,
 }
 
-#[cfg(target_arch = "wasm32")]
 fn wrap_text(text: &str, max_chars: usize) -> Vec<String> {
     let mut lines = Vec::new();
     let mut current_line = String::new();
@@ -260,9 +252,8 @@ fn wrap_text(text: &str, max_chars: usize) -> Vec<String> {
     lines
 }
 
-#[cfg(target_arch = "wasm32")]
-fn draw_rounded_rect(
-    ctx: &CanvasRenderingContext2d,
+fn draw_rounded_rect<C: Canvas>(
+    ctx: &C,
     x: f64,
     y: f64,
     w: f64,
@@ -290,9 +281,8 @@ fn draw_rounded_rect(
     ctx.stroke();
 }
 
-#[cfg(target_arch = "wasm32")]
-fn draw_tail_down(
-    ctx: &CanvasRenderingContext2d,
+fn draw_tail_down<C: Canvas>(
+    ctx: &C,
     tail_x: f64,
     bubble_bottom_y: f64,
     tip_y: f64,
@@ -313,9 +303,8 @@ fn draw_tail_down(
     ctx.fill_rect(tail_x - 12.0, bubble_bottom_y - 3.0, 24.0, 5.0);
 }
 
-#[cfg(target_arch = "wasm32")]
-fn draw_tail_left(
-    ctx: &CanvasRenderingContext2d,
+fn draw_tail_left<C: Canvas>(
+    ctx: &C,
     bubble_left_x: f64,
     tail_y: f64,
     tip_x: f64,
@@ -336,19 +325,49 @@ fn draw_tail_left(
     ctx.fill_rect(bubble_left_x - 2.0, tail_y - 10.0, 5.0, 20.0);
 }
 
+impl<I> Default for ImageAssets<I> {
+    fn default() -> Self {
+        Self {
+            bg_layer1: None,
+            bg_layer2: None,
+            bg_layer3: None,
+            obstacle_hurdle: None,
+            obstacle_meeting: None,
+            obstacle_cactus: None,
+            player_idle: None,
+            player_walk1: None,
+            player_walk2: None,
+            player_jump: None,
+            player_victory: None,
+            host_idle: None,
+            host_walk1: None,
+            host_walk2: None,
+            host_jump: None,
+            host_victory: None,
+        }
+    }
+}
+
 #[cfg(target_arch = "wasm32")]
-impl Renderer {
+impl Renderer<HtmlImageElement> {
     /// Creates a new `Renderer` targeting the specified canvas dimensions and loading level image assets.
     pub fn new(width: f64, height: f64, level: Option<&Level>) -> Self {
+        Self::with_assets(width, height, ImageAssets::load(level))
+    }
+}
+
+impl<I> Renderer<I> {
+    /// Creates a renderer with already prepared image assets.
+    pub fn with_assets(width: f64, height: f64, assets: ImageAssets<I>) -> Self {
         Self {
             width,
             height,
-            assets: ImageAssets::load(level),
+            assets,
         }
     }
 
     /// Renders the complete game view including background, track, entities, dialogue, and HUD.
-    pub fn render(&self, ctx: &CanvasRenderingContext2d, game: &Game) {
+    pub fn render<C: Canvas<Image = I>>(&self, ctx: &C, game: &Game) {
         // Clear screen
         ctx.clear_rect(0.0, 0.0, self.width, self.height);
 
@@ -398,8 +417,8 @@ impl Renderer {
         }
     }
 
-    fn draw_sky(&self, ctx: &CanvasRenderingContext2d, distance: f64) {
-        if let Some(img) = is_image_ready(&self.assets.bg_layer1) {
+    fn draw_sky<C: Canvas<Image = I>>(&self, ctx: &C, distance: f64) {
+        if let Some(img) = is_image_ready(ctx, &self.assets.bg_layer1) {
             draw_tiled_layer(
                 ctx,
                 img,
@@ -435,8 +454,8 @@ impl Renderer {
         ctx.fill();
     }
 
-    fn draw_distant_hills(&self, ctx: &CanvasRenderingContext2d, offset: f64) {
-        if let Some(img) = is_image_ready(&self.assets.bg_layer2) {
+    fn draw_distant_hills<C: Canvas<Image = I>>(&self, ctx: &C, offset: f64) {
+        if let Some(img) = is_image_ready(ctx, &self.assets.bg_layer2) {
             draw_tiled_layer(ctx, img, self.width, self.height, offset);
             return;
         }
@@ -459,8 +478,8 @@ impl Renderer {
         ctx.fill();
     }
 
-    fn draw_midground_trees(&self, ctx: &CanvasRenderingContext2d, offset: f64) {
-        if let Some(img) = is_image_ready(&self.assets.bg_layer3) {
+    fn draw_midground_trees<C: Canvas<Image = I>>(&self, ctx: &C, offset: f64) {
+        if let Some(img) = is_image_ready(ctx, &self.assets.bg_layer3) {
             draw_tiled_layer(ctx, img, self.width, self.height, offset);
             return;
         }
@@ -490,7 +509,7 @@ impl Renderer {
         }
     }
 
-    fn draw_track(&self, ctx: &CanvasRenderingContext2d, distance: f64) {
+    fn draw_track<C: Canvas<Image = I>>(&self, ctx: &C, distance: f64) {
         // Ground asphalt
         ctx.set_fill_style_str("#2f3640");
         ctx.fill_rect(0.0, GROUND_Y, self.width, self.height - GROUND_Y);
@@ -531,7 +550,7 @@ impl Renderer {
         }
     }
 
-    fn draw_checkpoints(&self, ctx: &CanvasRenderingContext2d, game: &Game) {
+    fn draw_checkpoints<C: Canvas<Image = I>>(&self, ctx: &C, game: &Game) {
         for (_, cp) in &game.active_checkpoints {
             let screen_x = cp.distance - game.distance + game.player.x;
             if screen_x > -CHECKPOINT_CULL_PADDING
@@ -558,7 +577,7 @@ impl Renderer {
         }
     }
 
-    fn draw_pickups(&self, ctx: &CanvasRenderingContext2d, game: &Game) {
+    fn draw_pickups<C: Canvas<Image = I>>(&self, ctx: &C, game: &Game) {
         for pickup in &game.active_pickups {
             let screen_x = pickup.distance - game.distance + game.player.x;
             if screen_x > -PICKUP_CULL_PADDING && screen_x < self.width + PICKUP_CULL_PADDING {
@@ -592,16 +611,16 @@ impl Renderer {
         }
     }
 
-    fn draw_obstacles(&self, ctx: &CanvasRenderingContext2d, game: &Game) {
+    fn draw_obstacles<C: Canvas<Image = I>>(&self, ctx: &C, game: &Game) {
         for obs in &game.active_obstacles {
             let screen_x = obs.distance - game.distance + game.player.x;
             if screen_x > -OBSTACLE_CULL_PADDING && screen_x < self.width + OBSTACLE_CULL_PADDING {
                 let y = GROUND_Y - obs.height;
 
                 let img_opt = match obs.kind.as_str() {
-                    "hurdle" => is_image_ready(&self.assets.obstacle_hurdle),
-                    "meeting" => is_image_ready(&self.assets.obstacle_meeting),
-                    "cactus" => is_image_ready(&self.assets.obstacle_cactus),
+                    "hurdle" => is_image_ready(ctx, &self.assets.obstacle_hurdle),
+                    "meeting" => is_image_ready(ctx, &self.assets.obstacle_meeting),
+                    "cactus" => is_image_ready(ctx, &self.assets.obstacle_cactus),
                     _ => None,
                 };
 
@@ -639,7 +658,7 @@ impl Renderer {
         }
     }
 
-    fn draw_player(&self, ctx: &CanvasRenderingContext2d, game: &Game) {
+    fn draw_player<C: Canvas<Image = I>>(&self, ctx: &C, game: &Game) {
         let p = &game.player;
         let blink =
             p.invulnerability_timer > 0.0 && ((p.invulnerability_timer * 10.0) as i32 % 2 == 0);
@@ -648,13 +667,13 @@ impl Renderer {
         }
 
         let sprite_img = match &game.state {
-            GameState::Victory { .. } => is_image_ready(&self.assets.player_victory),
-            _ if !p.is_grounded => is_image_ready(&self.assets.player_jump),
-            _ if p.animation_frame == 1 => is_image_ready(&self.assets.player_walk2),
+            GameState::Victory { .. } => is_image_ready(ctx, &self.assets.player_victory),
+            _ if !p.is_grounded => is_image_ready(ctx, &self.assets.player_jump),
+            _ if p.animation_frame == 1 => is_image_ready(ctx, &self.assets.player_walk2),
             _ if p.animation_frame == 0 && (game.input.right || game.input.left) => {
-                is_image_ready(&self.assets.player_walk1)
+                is_image_ready(ctx, &self.assets.player_walk1)
             }
-            _ => is_image_ready(&self.assets.player_idle),
+            _ => is_image_ready(ctx, &self.assets.player_idle),
         };
 
         if let Some(img) = sprite_img {
@@ -716,19 +735,19 @@ impl Renderer {
         let _ = ctx.fill_text("Sinä (Vieras)", p.x - 10.0, p.y - 6.0);
     }
 
-    fn draw_host(&self, ctx: &CanvasRenderingContext2d, game: &Game) {
+    fn draw_host<C: Canvas<Image = I>>(&self, ctx: &C, game: &Game) {
         let h = &game.host;
         let host_x = game.player.x + h.x_offset;
         let host_y = h.y;
 
         let sprite_img = match &game.state {
-            GameState::Victory { .. } => is_image_ready(&self.assets.host_victory),
-            _ if !h.is_grounded => is_image_ready(&self.assets.host_jump),
-            _ if h.animation_frame == 1 => is_image_ready(&self.assets.host_walk2),
+            GameState::Victory { .. } => is_image_ready(ctx, &self.assets.host_victory),
+            _ if !h.is_grounded => is_image_ready(ctx, &self.assets.host_jump),
+            _ if h.animation_frame == 1 => is_image_ready(ctx, &self.assets.host_walk2),
             _ if h.animation_frame == 0 && (game.input.right || game.input.left) => {
-                is_image_ready(&self.assets.host_walk1)
+                is_image_ready(ctx, &self.assets.host_walk1)
             }
-            _ => is_image_ready(&self.assets.host_idle),
+            _ => is_image_ready(ctx, &self.assets.host_idle),
         };
 
         if let Some(img) = sprite_img {
@@ -795,7 +814,7 @@ impl Renderer {
         let _ = ctx.fill_text("Jukka (Juokseva Johtaja)", host_x - 30.0, host_y - 6.0);
     }
 
-    fn draw_dialogue(&self, ctx: &CanvasRenderingContext2d, game: &Game) {
+    fn draw_dialogue<C: Canvas<Image = I>>(&self, ctx: &C, game: &Game) {
         if let Some(msg) = &game.host.active_dialogue {
             let host_x = game.player.x + game.host.x_offset;
             let bubble_x = host_x - 30.0;
@@ -818,7 +837,7 @@ impl Renderer {
         }
     }
 
-    fn draw_hud(&self, ctx: &CanvasRenderingContext2d, game: &Game) {
+    fn draw_hud<C: Canvas<Image = I>>(&self, ctx: &C, game: &Game) {
         // HUD container top bar
         ctx.set_fill_style_str("rgba(47, 53, 66, 0.85)");
         ctx.fill_rect(0.0, 0.0, self.width, HUD_BAR_HEIGHT);
@@ -870,7 +889,7 @@ impl Renderer {
         let _ = ctx.fill_text(&format!("Pisteet: {}", game.player.score), 800.0, 28.0);
     }
 
-    fn draw_start_screen(&self, ctx: &CanvasRenderingContext2d, game: &Game) {
+    fn draw_start_screen<C: Canvas<Image = I>>(&self, ctx: &C, game: &Game) {
         ctx.set_fill_style_str("rgba(0, 0, 0, 0.65)");
         ctx.fill_rect(0.0, 0.0, self.width, self.height);
 
@@ -903,9 +922,9 @@ impl Renderer {
         let _ = ctx.fill_text("ALOTA LENKKI [→]", center_x - 110.0, 378.0);
     }
 
-    fn draw_quiz_overlay(
+    fn draw_quiz_overlay<C: Canvas<Image = I>>(
         &self,
-        ctx: &CanvasRenderingContext2d,
+        ctx: &C,
         game: &Game,
         feedback: Option<&crate::game::QuizFeedback>,
     ) {
@@ -1097,9 +1116,9 @@ impl Renderer {
         }
     }
 
-    fn draw_victory_screen(
+    fn draw_victory_screen<C: Canvas<Image = I>>(
         &self,
-        ctx: &CanvasRenderingContext2d,
+        ctx: &C,
         _game: &Game,
         score: u32,
         time_sec: f64,
@@ -1140,7 +1159,7 @@ impl Renderer {
         let _ = ctx.fill_text("PELAA UUDELLEEN [R]", center_x - 120.0, 365.0);
     }
 
-    fn draw_game_over_screen(&self, ctx: &CanvasRenderingContext2d, reason: &str) {
+    fn draw_game_over_screen<C: Canvas<Image = I>>(&self, ctx: &C, reason: &str) {
         ctx.set_fill_style_str("rgba(0, 0, 0, 0.85)");
         ctx.fill_rect(0.0, 0.0, self.width, self.height);
 

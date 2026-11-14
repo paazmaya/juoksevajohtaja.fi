@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Juokseva Johtaja, kausi 1, jakso 1">
+  <rect width="600" height="600" fill="#1F2937"/>
+  <circle cx="420" cy="190" r="120" fill="#FF6B35"/>
+  <path d="M0 470 Q150 410 300 450 T600 430 V600 H0Z" fill="#2563EB"/>
+  <path d="M0 520 Q170 480 320 510 T600 500 V600 H0Z" fill="#375166"/>
+  <text x="48" y="110" fill="#E5E7EB" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" letter-spacing="4">KAUSI 1 · JAKSO 1</text>
+  <text x="48" y="330" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="800">Undisclosed</text>
+  <text x="48" y="380" fill="#E5E7EB" font-family="Arial, Helvetica, sans-serif" font-size="28">Juokseva Johtaja</text>
+</svg>

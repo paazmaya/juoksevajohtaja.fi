@@ -1,0 +1,8 @@
+.play-button {
+  min-width: var(--size-play-button);
+
+  &[aria-pressed="true"] {
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+}

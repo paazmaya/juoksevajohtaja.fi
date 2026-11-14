@@ -1,43 +1,45 @@
 {
   "name": "juoksevajohtaja.fi",
-  "version": "0.1.0",
-  "description": "Static web site for the running leader podcast",
+  "version": "0.2.0",
   "private": true,
-  "type": "commonjs",
-  "scripts": {
-    "build:site": "npx @11ty/eleventy",
-    "build:game": "cd game && trunk build --release",
-    "build": "npm run build:site && npm run build:game",
-    "start": "npx @11ty/eleventy --serve",
-    "serve:game": "cd game && trunk serve",
-    "lint": "oxfmt --check",
-    "format": "oxfmt",
-    "test:cargo": "cargo test --manifest-path game/Cargo.toml",
-    "pretest:e2e": "npm run build",
-    "test:e2e": "playwright test",
-    "test": "npm run test:cargo && npm run test:e2e"
+  "description": "Rust and WebAssembly web site for the running leader podcast",
+  "homepage": "https://github.com/paazmaya/juoksevajohtaja.fi",
+  "bugs": {
+    "url": "https://github.com/paazmaya/juoksevajohtaja.fi/issues"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/paazmaya/juoksevajohtaja.fi.git"
-  },
+  "license": "MIT",
   "author": {
     "name": "Juga Paazmaya",
     "email": "paazmaya@yahoo.com",
     "url": "https://paazmaya.fi"
   },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/paazmaya/juoksevajohtaja.fi/issues"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paazmaya/juoksevajohtaja.fi.git"
   },
-  "homepage": "https://github.com/paazmaya/juoksevajohtaja.fi",
+  "type": "commonjs",
+  "scripts": {
+    "build:site": "cd site && trunk build --release",
+    "build:game": "cd game && trunk build --release",
+    "build:prerender": "cargo run --release -p juoksevajohtaja-site --bin prerender -- dist",
+    "build": "npm run build:site && npm run build:game && npm run build:prerender",
+    "start": "cd site && trunk serve",
+    "serve:game": "cd game && trunk serve",
+    "serve": "node scripts/serve.js",
+    "lint": "oxfmt --check && cargo fmt --all --check",
+    "format": "oxfmt && cargo fmt --all",
+    "test:cargo": "cargo test --workspace --all-targets --features juoksevajohtaja-content/parse",
+    "test:coverage": "cargo llvm-cov --workspace --all-targets --features juoksevajohtaja-content/parse --fail-under-lines 95 --ignore-filename-regex \"bevy_reference|[\\\\/]src[\\\\/]main\\.rs|[\\\\/]src[\\\\/]bin[\\\\/]|[\\\\/]src[\\\\/]web\\.rs\"",
+    "pretest:e2e": "npm run build",
+    "test:e2e": "playwright test",
+    "test": "npm run test:coverage && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "oxfmt": "0.70.0"
+  },
   "engines": {
     "node": ">=22.11.0",
     "npm": ">=10.9.0"
-  },
-  "devDependencies": {
-    "@11ty/eleventy": "3.1.8",
-    "@playwright/test": "^1.50.0",
-    "oxfmt": "0.70.0"
   }
 }

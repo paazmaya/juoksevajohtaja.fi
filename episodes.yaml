@@ -1,0 +1,44 @@
+# Podcast and episode metadata for juoksevajohtaja.fi.
+#
+# Each episode points to a markdown file (`content:`) that must contain two sections:
+#   ## Tiivistelmä   – short summary, shown on the episode grid, in search results and in the RSS feed
+#   ## Vieras        – introduction of the guest for visitors, shown on the episode page
+#
+# Image paths are relative to site/public. `audio_url` must be an https:// URL (or a site path).
+# `highlights[].time` is optional (mm:ss or h:mm:ss); timestamped highlights let the listener jump to that moment.
+
+podcast:
+  title: Juokseva Johtaja
+  description: >-
+    Juokseva Johtaja on podcast, jossa juoksulenkin lomassa haastatellaan ohjelmistokehityksen parissa
+    työskenteleviä johtavia henkilöitä. Ensimmäisellä kaudella käydään läpi johtamisen ammattilaisia,
+    jotka ovat työskennelleet podcastin vetäjän, Jukka Paasosen esihenkilöinä.
+  author: Jukka Paasonen
+  language: fi
+  base_url: https://juoksevajohtaja.fi
+  image: icons/android-chrome-512x512.png
+  categories:
+    - Business
+    - Management
+
+episodes:
+  - season: 1
+    number: 1
+    slug: undisclosed
+    title: Undisclosed
+    date: 2021-02-11
+    image: images/episodes/episode-1.svg
+    image_alt: Juokseva Johtaja, kausi 1, jakso 1
+    audio_url: https://media.juoksevajohtaja.fi/kausi-1/jakso-1.mp3
+    audio_bytes: 0
+    duration_seconds: 2700
+    content: content/episode-1.md
+    guest:
+      name: Undisclosed
+      role: Ohjelmistokehityksen johtaja
+    highlights:
+      - time: "2:00"
+        text: Lenkki alkaa ja vieras esittäytyy
+      - time: "15:30"
+        text: Mitä hyvä esihenkilö tekee ensimmäisenä päivänä
+      - text: Loppukiri ja vinkit tuleville johtajille

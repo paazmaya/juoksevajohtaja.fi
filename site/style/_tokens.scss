@@ -1,0 +1,186 @@
+// Design system for juoksevajohtaja.fi — the ONLY place for colors, spacing, typography, sizes, radii,
+// shadows, layers and motion. Components and pages reference these through `var(--…)` (and breakpoints
+// through `t.$breakpoint-*`); `site/tests/design_tokens.rs` enforces that.
+
+// Breakpoints (media queries cannot read custom properties).
+$breakpoint-sm: 36rem;
+$breakpoint-md: 48rem;
+$breakpoint-lg: 64rem;
+
+// Raw palette.
+// Host palette from game/assets/PROMPTS.md and the original site brand blues.
+$host-orange: #ff6b35;
+$host-orange-dark: #e4521d;
+$host-navy: #1f2937;
+$host-blue: #2563eb;
+$host-charcoal: #263238;
+$host-gray: #e5e7eb;
+$host-skin: #f2c4a0;
+$host-hair: #5b3a29;
+$brand-slate: #375166;
+$brand-ink: #243442;
+$brand-periwinkle: #7a88c2;
+$brand-sky: #70a3cf;
+$brand-steel: #5b85a8;
+$white: #ffffff;
+$paper: #f6f7f9;
+$night: #0f172a;
+$night-raised: #1e293b;
+$game-bg: #0b1120;
+
+@mixin light-theme {
+  --color-bg: #{$paper};
+  --color-surface: #{$white};
+  --color-surface-raised: #{$host-gray};
+  --color-text: #{$host-navy};
+  --color-text-muted: #{$brand-ink};
+  --color-border: #{$host-gray};
+  --color-border-strong: #{$brand-periwinkle};
+  --color-link: #{$host-blue};
+  --color-accent: #{$host-orange};
+  --color-accent-strong: #{$host-orange-dark};
+  --color-accent-soft: #{rgba($host-orange, 0.14)};
+  --color-accent-text: #{#b23d12};
+  --color-overlay-hover: #{rgba($host-navy, 0.08)};
+}
+
+@mixin dark-theme {
+  --color-bg: #{$night};
+  --color-surface: #{$night-raised};
+  --color-surface-raised: #{$brand-ink};
+  --color-text: #{$host-gray};
+  --color-text-muted: #{#b6c2d1};
+  --color-border: #{$brand-ink};
+  --color-border-strong: #{$brand-steel};
+  --color-link: #{$brand-sky};
+  --color-accent: #{$host-orange};
+  --color-accent-strong: #{#ff8a5f};
+  --color-accent-soft: #{rgba($host-orange, 0.2)};
+  --color-accent-text: #{#ff9a73};
+  --color-overlay-hover: #{rgba($white, 0.1)};
+}
+
+:root {
+  color-scheme: light dark;
+
+  @include light-theme;
+
+  // Fixed roles (same in both themes).
+  --color-on-accent: #{$white};
+  --color-focus: #{$host-blue};
+  --color-header-bg: #{rgba($host-navy, 0.92)};
+  --color-header-text: #{$white};
+  --color-header-hover: #{rgba($white, 0.12)};
+  --color-hero-bg: #{linear-gradient(160deg, $brand-ink 0%, $brand-slate 55%, $brand-steel 100%)};
+  --color-hero-text: #{$white};
+  --color-hero-muted: #{$host-gray};
+  --color-footer-bg: #{$brand-ink};
+  --color-footer-text: #{$host-gray};
+  --color-player-bg: #{$host-navy};
+  --color-player-text: #{$white};
+  --color-player-muted: #{$host-gray};
+  --color-game-bg: #{$game-bg};
+  --color-game-text: #{$host-gray};
+
+  // The host character.
+  --color-host-skin: #{$host-skin};
+  --color-host-hair: #{$host-hair};
+  --color-host-shirt: #{$host-orange};
+  --color-host-shorts: #{$host-navy};
+  --color-host-shoes: #{$host-blue};
+  --color-host-soles: #{$host-gray};
+  --color-host-headphones: #{$host-charcoal};
+
+  // Typography.
+  --font-family-body:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-display:
+    "Avenir Next", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  --font-family-mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.1875rem;
+  --font-size-xl: 1.375rem;
+  --font-size-2xl: 1.75rem;
+  --font-size-3xl: clamp(2rem, 4vw + 1rem, 3rem);
+  --font-size-hero: clamp(2.5rem, 6vw + 1rem, 4.5rem);
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+  --font-weight-black: 800;
+  --line-height-tight: 1.15;
+  --line-height-body: 1.6;
+  --letter-spacing-caps: 0.06em;
+
+  // Spacing scale.
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 2rem;
+  --space-8: 2.5rem;
+  --space-9: 3rem;
+  --space-10: 4rem;
+  --space-11: 5rem;
+  --space-12: 6rem;
+
+  // Sizes.
+  --width-page: 72rem;
+  --width-wide: 80rem;
+  --width-prose: 42rem;
+  --size-icon: 1.25rem;
+  --size-touch: 2.75rem;
+  --size-header: 4rem;
+  --size-player: 5.5rem;
+  --size-player-cover: 3.5rem;
+  --size-avatar: 4.5rem;
+  --size-timestamp: 3.75rem;
+  --size-play-button: 11rem;
+  --size-runner: 3rem;
+  --size-runner-large: 8rem;
+  --size-runner-track: 5rem;
+  --border-width: 1px;
+  --border-width-thick: 2px;
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+  --blur-header: 8px;
+
+  // Radii.
+  --radius-sm: 0.375rem;
+  --radius-lg: 1rem;
+  --radius-pill: 999px;
+  --radius-round: 50%;
+
+  // Shadows.
+  --shadow-sm: 0 1px 3px #{rgba($host-navy, 0.12)}, 0 1px 2px #{rgba($host-navy, 0.08)};
+  --shadow-lg: 0 12px 32px #{rgba($host-navy, 0.18)};
+  --shadow-up: 0 -4px 16px #{rgba($night, 0.25)};
+
+  // Layers.
+  --z-header: 10;
+  --z-player: 20;
+  --z-loader: 30;
+
+  // Motion.
+  --motion-fast: 120ms;
+  --motion-medium: 200ms;
+  --motion-stride: 380ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in-out: ease-in-out;
+  --runner-swing-back: -32deg;
+  --runner-swing-forward: 32deg;
+  --runner-bob: -4%;
+  --opacity-back-limb: 0.75;
+  --brightness-back-limb: 0.85;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    @include dark-theme;
+  }
+}
+
+:root[data-theme="dark"] {
+  @include dark-theme;
+}

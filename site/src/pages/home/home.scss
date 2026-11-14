@@ -1,0 +1,59 @@
+@use "../../../style/tokens" as t;
+
+.home-hero {
+  background: var(--color-hero-bg);
+  color: var(--color-hero-text);
+
+  &__inner {
+    max-width: var(--width-page);
+    margin: 0 auto;
+    padding: var(--space-10) var(--space-4) var(--space-9);
+
+    @media (min-width: t.$breakpoint-md) {
+      padding-top: var(--space-12);
+      padding-bottom: var(--space-11);
+    }
+  }
+
+  &__eyebrow {
+    margin: 0 0 var(--space-3);
+    color: var(--color-host-shirt);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--letter-spacing-caps);
+    text-transform: uppercase;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-hero);
+    font-weight: var(--font-weight-black);
+    line-height: var(--line-height-tight);
+  }
+
+  &__lead {
+    max-width: var(--width-prose);
+    margin: var(--space-5) 0 var(--space-7);
+    color: var(--color-hero-muted);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-body);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+}
+
+.home-episodes {
+  max-width: var(--width-page);
+  margin: 0 auto;
+  padding: var(--space-9) var(--space-4) 0;
+
+  &__title {
+    margin: 0 0 var(--space-6);
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-2xl);
+  }
+}

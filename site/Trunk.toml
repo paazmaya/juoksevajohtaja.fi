@@ -1,0 +1,13 @@
+[build]
+target = "index.html"
+dist = "../dist"
+public_url = "/"
+filehash = true
+
+[serve]
+port = 8080
+open = false
+
+# Development: run `npm run serve:game` alongside `npm start` to load the game iframe at /peli.
+[[proxy]]
+backend = "http://127.0.0.1:8081/peli-app/"

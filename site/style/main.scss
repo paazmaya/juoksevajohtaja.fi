@@ -1,0 +1,102 @@
+// Entry stylesheet compiled by Trunk. Base element styles + every component and page stylesheet.
+@use "tokens";
+
+@use "../src/components/audio_player/audio_player";
+@use "../src/components/button/button";
+@use "../src/components/episode_card/episode_card";
+@use "../src/components/episode_grid/episode_grid";
+@use "../src/components/guest_card/guest_card";
+@use "../src/components/highlight_list/highlight_list";
+@use "../src/components/icon/icon";
+@use "../src/components/play_button/play_button";
+@use "../src/components/runner_loader/runner_loader";
+@use "../src/components/site_footer/site_footer";
+@use "../src/components/site_header/site_header";
+@use "../src/pages/episode/episode";
+@use "../src/pages/game/game";
+@use "../src/pages/home/home";
+@use "../src/pages/not_found/not_found";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+}
+
+#app {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.site-main {
+  flex: 1;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+a {
+  color: var(--color-link);
+}
+
+.prose {
+  max-width: var(--width-prose);
+
+  p {
+    margin: 0 0 var(--space-4);
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: var(--border-width);
+  height: var(--border-width);
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: var(--z-loader);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  transform: translateY(calc(-1 * var(--space-12)));
+
+  &:focus {
+    transform: none;
+  }
+}
+
+// The boot loader lives in the static shell until the application has mounted.
+.is-ready #boot-loader {
+  display: none;
+}

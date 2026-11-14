@@ -1,3 +1,5 @@
+// Static server for the built site, behaving like the production host:
+// directories serve index.html, unknown paths get dist/404.html (the pre-rendered SPA fallback).
 const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
@@ -10,39 +12,51 @@ const MIME_TYPES = {
   ".js": "application/javascript; charset=utf-8",
   ".wasm": "application/wasm",
   ".json": "application/json; charset=utf-8",
+  ".webmanifest": "application/manifest+json; charset=utf-8",
   ".css": "text/css; charset=utf-8",
+  ".xml": "application/xml; charset=utf-8",
+  ".txt": "text/plain; charset=utf-8",
   ".png": "image/png",
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
   ".svg": "image/svg+xml",
   ".ico": "image/x-icon",
+  ".mp3": "audio/mpeg",
 };
+
+function resolveFile(urlPath) {
+  const filePath = path.join(ROOT_DIR, urlPath);
+  if (!filePath.startsWith(ROOT_DIR)) {
+    return null;
+  }
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+    const index = path.join(filePath, "index.html");
+    return fs.existsSync(index) ? index : null;
+  }
+  return fs.existsSync(filePath) ? filePath : null;
+}
 
 const server = http.createServer((req, res) => {
   const urlPath = decodeURIComponent(new URL(req.url, `http://localhost:${PORT}`).pathname);
-  let filePath = path.join(ROOT_DIR, urlPath);
+  let filePath = resolveFile(urlPath);
+  let status = 200;
 
-  // If path is a directory, serve index.html
-  if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
-    filePath = path.join(filePath, "index.html");
-  } else if (!fs.existsSync(filePath) && fs.existsSync(`${filePath}.html`)) {
-    filePath = `${filePath}.html`;
-  }
-
-  if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
-    res.writeHead(404, { "Content-Type": "text/plain" });
-    res.end("404 Not Found");
-    return;
+  if (!filePath) {
+    status = 404;
+    filePath = path.join(ROOT_DIR, "404.html");
+    if (!fs.existsSync(filePath)) {
+      res.writeHead(404, { "Content-Type": "text/plain" });
+      res.end("404 Not Found");
+      return;
+    }
   }
 
   const ext = path.extname(filePath).toLowerCase();
-  const contentType = MIME_TYPES[ext] || "application/octet-stream";
-
-  res.writeHead(200, {
-    "Content-Type": contentType,
+  res.writeHead(status, {
+    "Content-Type": MIME_TYPES[ext] || "application/octet-stream",
     "Cache-Control": "no-cache",
   });
-
   fs.createReadStream(filePath).pipe(res);
 });
 

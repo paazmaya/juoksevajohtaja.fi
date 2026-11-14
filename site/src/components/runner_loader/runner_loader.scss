@@ -1,0 +1,152 @@
+.runner {
+  display: block;
+  width: var(--size-runner);
+  height: var(--size-runner);
+  overflow: visible;
+
+  &__skin {
+    fill: var(--color-host-skin);
+  }
+
+  &__hair {
+    fill: var(--color-host-hair);
+  }
+
+  &__shirt {
+    fill: var(--color-host-shirt);
+  }
+
+  &__shorts {
+    fill: var(--color-host-shorts);
+  }
+
+  &__shoe {
+    fill: var(--color-host-shoes);
+  }
+
+  &__sole {
+    fill: var(--color-host-soles);
+  }
+
+  &__headphones {
+    stroke: var(--color-host-headphones);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+
+  &__earcup {
+    fill: var(--color-host-headphones);
+  }
+
+  &__body {
+    transform-box: fill-box;
+    animation: runner-bob calc(var(--motion-stride) / 2) var(--ease-in-out) infinite alternate;
+  }
+
+  &__leg,
+  &__arm {
+    transform-box: fill-box;
+    transform-origin: 50% 8%;
+    animation: runner-swing var(--motion-stride) var(--ease-in-out) infinite alternate;
+  }
+
+  &__leg--back,
+  &__arm--front {
+    animation-direction: alternate-reverse;
+  }
+
+  &__arm--back {
+    opacity: var(--opacity-back-limb);
+  }
+
+  &__leg--back {
+    filter: brightness(var(--brightness-back-limb));
+  }
+}
+
+.runner-loader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+
+  &__track {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: var(--size-runner-track);
+  }
+
+  &__ground {
+    position: absolute;
+    right: 0;
+    bottom: var(--space-1);
+    left: 0;
+    height: var(--border-width-thick);
+    background: repeating-linear-gradient(
+      90deg,
+      var(--color-border-strong) 0 var(--space-2),
+      transparent var(--space-2) var(--space-4)
+    );
+    background-size: var(--space-4) 100%;
+    animation: runner-ground calc(var(--motion-stride) * 2) linear infinite;
+  }
+
+  &--strip {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: var(--z-loader);
+    justify-content: center;
+    padding: var(--space-1) var(--space-4);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-up);
+  }
+
+  &--overlay {
+    position: absolute;
+    inset: 0;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--color-game-bg);
+    color: var(--color-game-text);
+  }
+}
+
+@keyframes runner-swing {
+  from {
+    transform: rotate(var(--runner-swing-back));
+  }
+
+  to {
+    transform: rotate(var(--runner-swing-forward));
+  }
+}
+
+@keyframes runner-bob {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(var(--runner-bob));
+  }
+}
+
+@keyframes runner-ground {
+  to {
+    background-position: calc(-1 * var(--space-4)) 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .runner__body,
+  .runner__leg,
+  .runner__arm,
+  .runner-loader__ground {
+    animation: none;
+  }
+}

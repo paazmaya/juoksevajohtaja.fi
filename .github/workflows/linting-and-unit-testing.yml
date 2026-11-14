@@ -5,11 +5,13 @@ on:
     branches: [main]
     paths-ignore:
       - "**.md"
+      - "!content/**"
       - "LICENSE*"
   pull_request:
     branches: [main]
     paths-ignore:
       - "**.md"
+      - "!content/**"
       - "LICENSE*"
 
 concurrency:
@@ -20,41 +22,44 @@ permissions: {}
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
 
     steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      with:
-        persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-    - name: Use Node.js v24
-      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-      with:
-        node-version: '24.x'
+      - name: Use Node.js v24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24.x"
 
-    - name: Set up Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        targets: wasm32-unknown-unknown
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: rustfmt, llvm-tools-preview
 
-    - name: Install Trunk
-      run: |
-        curl -sSL https://github.com/trunk-rs/trunk/releases/download/v0.22.1/trunk-x86_64-unknown-linux-gnu.tar.gz | sudo tar -xzf- -C /usr/local/bin
+      - name: Install Trunk
+        run: |
+          curl -sSL https://github.com/trunk-rs/trunk/releases/download/v0.22.1/trunk-x86_64-unknown-linux-gnu.tar.gz | sudo tar -xzf- -C /usr/local/bin
 
-    - name: Install Node.js dependencies
-      run: npm ci --ignore-scripts --registry=https://registry.npmjs.com
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-llvm-cov
 
-    - name: Install Playwright browsers
-      run: npx --registry=https://registry.npmjs.com playwright install --with-deps chromium
+      - name: Install Node.js dependencies
+        run: npm ci --ignore-scripts --registry=https://registry.npmjs.com
 
-    - name: Lint
-      run: npm run lint
+      - name: Install Playwright browsers
+        run: npx --registry=https://registry.npmjs.com playwright install --with-deps chromium
 
-    - name: Build
-      run: npm run build
+      - name: Lint
+        run: npm run lint
 
-    - name: Test
-      run: npm test
+      # Unit tests with the 95 % line coverage gate, then build (site, game, pre-render) and end-to-end tests.
+      - name: Test
+        run: npm test

@@ -1,0 +1,19 @@
+[package]
+name = "juoksevajohtaja-content"
+version = "0.1.0"
+description = "Episode data model, content parsing and SEO/feed generation for juoksevajohtaja.fi"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[features]
+default = []
+# Parsing of episodes.yaml and markdown. Only needed at build time (build.rs), never in the wasm bundle.
+parse = ["dep:serde", "dep:serde_norway", "dep:pulldown-cmark"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"], optional = true }
+serde_norway = { version = "0.9", optional = true }
+pulldown-cmark = { version = "0.13", default-features = false, features = [
+  "html",
+], optional = true }

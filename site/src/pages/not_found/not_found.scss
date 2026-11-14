@@ -1,0 +1,26 @@
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: var(--width-prose);
+  margin: 0 auto;
+  padding: var(--space-11) var(--space-4) var(--space-8);
+  text-align: center;
+
+  .runner {
+    width: var(--size-runner-large);
+    height: var(--size-runner-large);
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-3xl);
+  }
+
+  &__text {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+}

@@ -1,0 +1,18 @@
+[workspace]
+resolver = "2"
+members = ["crates/content", "site", "game"]
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
+rust-version = "1.88"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+
+# The game loop benefits more from speed than from a few saved kilobytes.
+[profile.release.package.juokseva-johtaja-game]
+opt-level = 3

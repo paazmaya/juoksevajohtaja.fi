@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Juokseva Johtaja</title>
+    <meta name="theme-color" content="#1f2937" />
+    <meta name="author" content="Jukka Paasonen" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link data-trunk rel="scss" href="style/main.scss" />
+    <link
+      data-trunk
+      rel="rust"
+      href="Cargo.toml"
+      data-bin="juoksevajohtaja-site"
+      data-cargo-no-default-features
+      data-cargo-features="csr"
+      data-wasm-opt="z"
+    />
+    <link data-trunk rel="copy-dir" href="public/icons" />
+    <link data-trunk rel="copy-dir" href="public/images" />
+    <link data-trunk rel="copy-file" href="public/favicon.ico" />
+    <link data-trunk rel="copy-file" href="public/site.webmanifest" />
+
+    <!-- Yandex.Metrika counter -->
+    <script>
+      (function (m, e, t, r, i, k, a) {
+        m[i] =
+          m[i] ||
+          function () {
+            (m[i].a = m[i].a || []).push(arguments);
+          };
+        m[i].l = 1 * new Date();
+        ((k = e.createElement(t)),
+          (a = e.getElementsByTagName(t)[0]),
+          (k.async = 1),
+          (k.src = r),
+          a.parentNode.insertBefore(k, a));
+      })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+      ym(74732011, "init", {
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+        webvisor: true,
+      });
+    </script>
+    <!-- /Yandex.Metrika counter -->
+  </head>
+  <body>
+    <div id="app"><!--app--></div>
+    <div id="boot-loader"><!--boot-loader--></div>
+  </body>
+</html>

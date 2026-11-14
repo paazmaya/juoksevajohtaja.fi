@@ -1,0 +1,66 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--color-header-bg);
+  color: var(--color-header-text);
+  backdrop-filter: blur(var(--blur-header));
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    max-width: var(--width-page);
+    min-height: var(--size-header);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+  }
+
+  &__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: inherit;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-black);
+    text-decoration: none;
+    white-space: nowrap;
+
+    .icon {
+      color: var(--color-host-shirt);
+    }
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--size-touch);
+    padding: 0 var(--space-3);
+    border-radius: var(--radius-pill);
+    color: inherit;
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+
+    &:hover {
+      background: var(--color-header-hover);
+    }
+
+    &[aria-current="page"] {
+      background: var(--color-host-shirt);
+      color: var(--color-on-accent);
+    }
+
+    &:focus-visible {
+      outline: var(--focus-ring-width) solid var(--color-focus);
+      outline-offset: var(--focus-ring-offset);
+    }
+  }
+}

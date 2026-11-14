@@ -1,6 +1,7 @@
 //! WebAssembly browser entry point, DOM event listeners, and main animation loop for Juokseva Johtaja.
 
 pub mod audio;
+pub mod canvas;
 pub mod game;
 pub mod level;
 pub mod physics;

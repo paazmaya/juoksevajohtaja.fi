@@ -1,26 +1,22 @@
 const { test, expect } = require("@playwright/test");
 
-test.describe("Juokseva Johtaja Site & Game Navigation", () => {
-  test("homepage loads and contains a working link to /game/", async ({ page }) => {
-    await page.goto("/");
-    await expect(page).toHaveTitle(/Juokseva Johtaja/);
-
-    const gameLink = page.locator('a[href="/game/"]');
-    await expect(gameLink).toBeVisible();
-    await expect(gameLink).toContainText("Pelaa podcast-juoksupeliä");
-
-    await gameLink.click();
-    await expect(page).toHaveURL(/\/game\/?/);
-    await expect(page).toHaveTitle(/Juokseva Johtaja - Podcast Runner Game/);
-  });
-});
-
+// The game is a separate Trunk build at /peli-app/. On the site it is embedded at /peli (see site.spec.js);
+// these tests exercise it standalone.
 test.describe("Juokseva Johtaja 2D Running Game UI", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/game/");
+    await page.goto("/peli-app/");
   });
 
-  test("loads full-screen canvas and in-game UI with back link and instructions button", async ({ page }) => {
+  test("removes the running-host loader once the game WebAssembly has started", async ({
+    page,
+  }) => {
+    await expect(page.locator("#game-loader")).toHaveCount(0);
+    await expect(page.locator("html")).not.toHaveClass(/embedded/);
+  });
+
+  test("loads full-screen canvas and in-game UI with back link and instructions button", async ({
+    page,
+  }) => {
     const canvas = page.locator("#game-canvas");
     await expect(canvas).toBeVisible();
 
@@ -120,7 +116,7 @@ test.describe("Juokseva Johtaja 2D Running Game UI", () => {
   });
 
   test("serves episode 1 level JSON correctly", async ({ page }) => {
-    const response = await page.request.get("/game/assets/levels/episode_1_undisclosed.json");
+    const response = await page.request.get("/peli-app/assets/levels/episode_1_undisclosed.json");
     expect(response.ok()).toBeTruthy();
 
     const level = await response.json();
