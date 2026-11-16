@@ -37,7 +37,6 @@ entire background, including gaps between limbs, with opaque pure white
 tint, horizon, ground, cast shadow, text, speech bubbles, extra characters or
 props outside the silhouette.
 
-
 For each human walk or run frame, use the selected character's written
 description and its exact outfit colors. Produce one image per frame; apply
 only the requested frame pose, not the idle pose or the other frame poses.

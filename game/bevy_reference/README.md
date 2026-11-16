@@ -38,11 +38,11 @@ bevy_reference/
 
 ## 2. Asset Mapping in Bevy
 
-| Game Element | Asset Path | Bevy Component / Crate |
-|---|---|---|
-| **Layer 1: Sky** | `assets/backgrounds/helsinki/layer1_sky.png` | `ParallaxLayer { z: -30.0, speed: 0.05 }` via `bevy_parallax` |
-| **Layer 2: Midground** | `assets/backgrounds/helsinki/layer2_midground.png` | `ParallaxLayer { z: -20.0, speed: 0.25 }` via `bevy_parallax` |
+| Game Element            | Asset Path                                          | Bevy Component / Crate                                        |
+| ----------------------- | --------------------------------------------------- | ------------------------------------------------------------- |
+| **Layer 1: Sky**        | `assets/backgrounds/helsinki/layer1_sky.png`        | `ParallaxLayer { z: -30.0, speed: 0.05 }` via `bevy_parallax` |
+| **Layer 2: Midground**  | `assets/backgrounds/helsinki/layer2_midground.png`  | `ParallaxLayer { z: -20.0, speed: 0.25 }` via `bevy_parallax` |
 | **Layer 3: Foreground** | `assets/backgrounds/helsinki/layer3_foreground.png` | `ParallaxLayer { z: -10.0, speed: 0.65 }` via `bevy_parallax` |
-| **Obstacles** | `assets/obstacles/obstacle_*.png` | `SpriteBundle` + `Collider::cuboid` via `bevy_rapier2d` |
-| **Guest Runner** | `assets/characters/adventurer/spritesheet.png` | `TextureAtlasLayout` (96x96 px cells, 5 frames) |
-| **Host Runner** | `assets/characters/player/spritesheet.png` | `TextureAtlasLayout` (96x96 px cells, 5 frames) |
+| **Obstacles**           | `assets/obstacles/obstacle_*.png`                   | `SpriteBundle` + `Collider::cuboid` via `bevy_rapier2d`       |
+| **Guest Runner**        | `assets/characters/adventurer/spritesheet.png`      | `TextureAtlasLayout` (96x96 px cells, 5 frames)               |
+| **Host Runner**         | `assets/characters/player/spritesheet.png`          | `TextureAtlasLayout` (96x96 px cells, 5 frames)               |
