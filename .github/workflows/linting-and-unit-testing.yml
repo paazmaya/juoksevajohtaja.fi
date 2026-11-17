@@ -27,17 +27,17 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: chainguard-actions/actions-checkout@37298d8de412b35988dd165ffae45f45b329d365 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Use Node.js v24
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        uses: chainguard-actions/actions-setup-node@0fc7fd914070e07cca22606e4cab3cfeaf43711d # v7.1.0
         with:
           node-version: "24.x"
 
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: chainguard-actions/dtolnay-rust-toolchain@7b7b95556805186e9eb5b44efdafea3a47dbaa56 # v1
         with:
           targets: wasm32-unknown-unknown
           components: rustfmt, llvm-tools-preview
@@ -47,7 +47,7 @@ jobs:
           curl -sSL https://github.com/trunk-rs/trunk/releases/download/v0.22.1/trunk-x86_64-unknown-linux-gnu.tar.gz | sudo tar -xzf- -C /usr/local/bin
 
       - name: Install cargo-llvm-cov
-        uses: taiki-e/install-action@v2
+        uses: chainguard-actions/taiki-e-install-action@4ad084f9b26e8738df9593d5b3c742885c5bb985 # v2.90.5
         with:
           tool: cargo-llvm-cov
 
